@@ -244,570 +244,258 @@
                 </button>
             </div>
             <div id="history-container" class="hidden mt-4">
-                <h3 class="text-xs font-bold text-slate-400 uppercase mb-3 flex items-ce <option value="Javanese">🇮🇩 Bahasa Jawa (Logat)</option>
-                        <option value="Sundanese">🇮🇩 Bahasa Sunda (Logat)</option>
-                        <option value="English">🇺🇸 English</option>
-                        <option value="Japanese">🇯🇵 Japanese</option>
-                        <option value="Korean">🇰🇷 Korean</option>
-                        <option value="Chinese">🇨🇳 Chinese</option>
-                    </select>
+                <h3 class="text-xs font-bold text-slate-400 uppercase mb-3 flex items-center gap-2 ml-1"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat & Download</h3>
+                <div id="history-list" class="space-y-2"></div>
+            </div>
+        </div>
+
+        <!-- === MODE DIALOG === -->
+        <div id="dialogue-section" class="hidden space-y-5 fade-in">
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-slate-800/40 p-3 rounded-xl border border-slate-700/50 border-l-4 border-l-slate-500">
+                    <div class="text-xs font-bold text-slate-300 mb-2 flex items-center gap-2"><i class="fa-solid fa-user-circle"></i> Speaker A</div>
+                    <select id="voice-a" class="w-full bg-slate-900/80 border-0 text-xs text-white p-2 rounded-lg mb-1.5 focus:ring-1 focus:ring-slate-500"></select>
+                    <select id="style-a" class="w-full bg-slate-900/80 border-0 text-xs text-slate-300 p-2 rounded-lg focus:ring-1 focus:ring-slate-500"></select>
                 </div>
-
-                <!-- Modifikasi Suara -->
-                <div>
-                    <label class="block text-xs font-bold text-sky-300 mb-1 uppercase">Modifikasi Nada & Kecepatan</label>
-                    <select id="voice-mod-select" class="w-full bg-slate-900 border border-slate-600 text-white text-sm rounded-lg p-2 outline-none focus:border-sky-500">
-                        <option value="">Normal (Standar)</option>
-                        <option value="deep">🔉 Nada Berat (Deep)</option>
-                        <option value="high">🔊 Nada Tinggi (High)</option>
-                        <option value="slow">🐢 Bicara Lambat</option>
-                        <option value="fast">🐇 Bicara Cepat</option>
-                    </select>
+                <div class="bg-slate-800/40 p-3 rounded-xl border border-slate-700/50 border-r-4 border-r-sky-500 text-right">
+                    <div class="text-xs font-bold text-sky-400 mb-2 flex items-center justify-end gap-2">Speaker B <i class="fa-solid fa-user-circle"></i></div>
+                    <select id="voice-b" class="w-full bg-slate-900/80 border-0 text-xs text-white p-2 rounded-lg mb-1.5 focus:ring-1 focus:ring-sky-500" dir="rtl"></select>
+                    <select id="style-b" class="w-full bg-slate-900/80 border-0 text-xs text-slate-300 p-2 rounded-lg focus:ring-1 focus:ring-sky-500" dir="rtl"></select>
                 </div>
+            </div>
 
-                <!-- Style Selector -->
-                <div>
-                    <label class="block text-xs font-bold text-sky-300 mb-1 uppercase">Karakter & Emosi</label>
-                    <select id="style-select" class="w-full bg-slate-900 border border-slate-600 text-white text-sm rounded-lg p-2 outline-none focus:border-sky-500">
-                        <option value="normal">Normal (Natural)</option>
-                        
-                        <optgroup label="Emosi & Ekspresi">
-                            <option value="cheerfully">😄 Ceria / Bahagia</option>
-                            <option value="sadly">😢 Sedih / Menangis</option>
-                            <option value="excitedly">🔥 Semangat / Hype</option>
-                            <option value="angrily">😡 Marah / Ngegas</option>
-                            <option value="scared">😱 Takut / Gugup</option>
-                            <option value="whisper">🤫 Berbisik (ASMR)</option>
-                        </optgroup>
-
-                        <optgroup label="Drama & Sinetron">
-                            <option value="melodramatic">🎭 Melodramatis (Lebay)</option>
-                            <option value="heartbroken">💔 Patah Hati (Sedih Berat)</option>
-                            <option value="villain">😈 Antagonis / Licik</option>
-                            <option value="confused">🤔 Bingung / Ragu</option>
-                            <option value="inner_monologue">💭 Suara Hati (Gumam)</option>
-                        </optgroup>
-
-                        <optgroup label="Komedi & Hiburan">
-                            <option value="comedian">🎤 Stand-up Comedian</option>
-                            <option value="laughing">😂 Sambil Tertawa</option>
-                            <option value="goofy">🤪 Konyol / Kartun</option>
-                            <option value="sarcastic">😏 Sarkastik / Nyindir</option>
-                        </optgroup>
-
-                        <optgroup label="Konten Kreator">
-                            <option value="podcaster">🎙️ Podcaster Santai</option>
-                            <option value="streamer">🎮 Game Streamer (Ngegas)</option>
-                            <option value="reviewer">📱 Tech Reviewer (Cerdas)</option>
-                            <option value="motivator">🌟 Motivator (Inspiratif)</option>
-                            <option value="news">📰 Pembaca Berita</option>
-                        </optgroup>
-
-                        <optgroup label="Karakter Fantasi">
-                            <option value="demon">🔥 Demon King</option>
-                            <option value="knight">⚔️ Medieval Knight</option>
-                            <option value="princess">👑 Princess</option>
-                            <option value="wizard">🧙‍♂️ Wizard</option>
-                            <option value="monster">👹 Monster</option>
-                            <option value="ghost">👻 Hantu</option>
-                            <option value="robot">🤖 Robot</option>
-                        </optgroup>
-                        
-                        <option value="custom">-- Instruksi Manual (Custom) --</option>
-                    </select>
-                </div>
-
-                <!-- Context Selector -->
-                <div id="context-selector-container">
-                    <label class="block text-xs font-bold text-sky-300 mb-1 uppercase">Konteks Situasi</label>
-                    <select id="context-select" class="w-full bg-slate-900 border border-slate-600 text-white text-sm rounded-lg p-2 outline-none focus:border-sky-500">
-                        <option value="">-- Tidak Ada --</option>
-                        
-                        <optgroup label="Konten Video & Medsos">
-                            <option value="intro">👋 Intro YouTube / Podcast</option>
-                            <option value="outro">🙏 Outro / Closing</option>
-                            <option value="unboxing">📦 Unboxing Produk</option>
-                            <option value="tutorial">📚 Tutorial Step-by-Step</option>
-                            <option value="promo">⚡ Iklan / Promo Cepat</option>
-                            <option value="vlog">🤳 Vlog Casual</option>
-                            <option value="creepypasta">👻 Cerita Horor</option>
-                        </optgroup>
-
-                        <optgroup label="Drama & Cerita">
-                            <option value="soap_opera">📺 Adegan Sinetron</option>
-                            <option value="breakup">💔 Momen Putus Cinta</option>
-                            <option value="confession">🤫 Pengakuan Rahasia</option>
-                            <option value="flashback">🕰️ Flashback Masa Lalu</option>
-                            <option value="dying">💀 Sekarat / Dramatis</option>
-                        </optgroup>
-
-                        <optgroup label="Komedi & Aksi">
-                            <option value="prank">🤡 Prank / Jahil</option>
-                            <option value="standup">🎤 Panggung Komedi</option>
-                            <option value="fail">🤦 Momen Apes / Fail</option>
-                            <option value="battle_shout">⚔️ Teriakan Perang</option>
-                            <option value="victory">🏆 Pidato Kemenangan</option>
-                        </optgroup>
-                    </select>
+            <div class="glass-panel p-0 overflow-hidden flex flex-col min-h-[400px] relative">
+                <div id="chat-container" class="flex-grow p-4 space-y-3 overflow-y-auto max-h-[400px] scroll-smooth bg-slate-900/30">
+                    <div class="flex flex-col items-center justify-center h-full text-slate-500 opacity-60 mt-8">
+                        <i class="fa-regular fa-comments text-3xl mb-2"></i><span class="text-xs">Belum ada percakapan</span>
+                    </div>
                 </div>
                 
-                <!-- Custom Prompt (Hidden) -->
-                <div id="custom-prompt-container" class="hidden">
-                    <label class="block text-[10px] font-bold text-slate-400 mb-1">Custom Prompt (English)</label>
-                    <input type="text" id="custom-prompt-input" placeholder="e.g. Speak like a pirate..." class="w-full bg-slate-900 border border-slate-600 text-white text-sm rounded-lg p-2 outline-none">
-                </div>
-
-                <!-- Debug Prompt View -->
-                <div id="debug-container" class="hidden mt-2 p-2 bg-black/30 rounded border border-slate-700">
-                    <p class="text-[10px] text-slate-400 font-mono mb-1">Prompt yang dikirim ke AI:</p>
-                    <textarea id="debug-prompt" readonly class="w-full h-16 bg-transparent text-[10px] text-green-400 font-mono resize-none outline-none"></textarea>
-                </div>
-            </div>
-
-            <!-- STANDARD CONTROLS -->
-            <div id="standard-controls" class="hidden grid grid-cols-2 gap-4 pt-2">
-                <div class="bg-slate-800/50 p-2 rounded-lg border border-slate-700">
-                    <label class="text-[10px] font-bold text-slate-400 uppercase">Kecepatan</label>
-                    <input type="range" id="rate" min="0.5" max="2" value="1" step="0.1" class="range-slider">
-                </div>
-                <div class="bg-slate-800/50 p-2 rounded-lg border border-slate-700">
-                    <label class="text-[10px] font-bold text-slate-400 uppercase">Nada</label>
-                    <input type="range" id="pitch" min="0" max="2" value="1" step="0.1" class="range-slider">
-                </div>
-            </div>
-
-            <!-- Buttons -->
-            <div class="flex gap-2 mt-2">
-                <button id="speak-btn" class="flex-grow bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-all flex justify-center items-center gap-2">
-                    <i class="fa-solid fa-play"></i> Generate & Play
-                </button>
-                <button onclick="toggleDebug()" class="bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white px-4 rounded-xl border border-slate-600" title="Lihat Prompt Asli">
-                    <i class="fa-solid fa-eye"></i>
-                </button>
-            </div>
-
-            <!-- Visualizer & Audio -->
-            <div class="flex justify-center h-8 gap-1 items-end opacity-50 transition-opacity duration-300" id="visualizer">
-                <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-            </div>
-            <audio id="audio-player" class="w-full hidden" controls></audio>
-        </div>
-
-        <!-- Info Panel (Combined & Restored) -->
-        <div class="glass-panel p-4 border-t-4 border-slate-600 space-y-5">
-            
-            <!-- Tips Karakter (Dikembalikan) -->
-            <div class="bg-slate-900/50 p-3 rounded-lg border border-slate-700">
-                <h4 class="text-xs font-bold text-amber-400 uppercase mb-2 flex items-center gap-2">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i> Tips Karakter Fantasi
-                </h4>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[10px] text-slate-300">
-                    <div class="bg-slate-800 p-2 rounded border border-slate-700/50">
-                        <strong class="block text-red-400 mb-1"><i class="fa-solid fa-fire"></i> Demon King</strong>
-                        Pilih suara <b>Fenrir/Charon</b> + Style <b>Demon</b>.
+                <div class="border-t border-slate-700 p-4 bg-slate-800/90 backdrop-blur-md z-10">
+                    <form onsubmit="event.preventDefault(); addLine();" class="flex items-center gap-2 mb-2">
+                        <div class="relative shrink-0">
+                            <select id="speaker-select" class="h-11 pl-3 pr-8 bg-slate-700 text-white text-xs font-bold rounded-xl border border-slate-600 focus:border-sky-500 outline-none appearance-none transition-all cursor-pointer hover:bg-slate-600">
+                                <option value="A">Spk A</option><option value="B">Spk B</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-2.5 flex items-center pointer-events-none text-slate-400"><i class="fa-solid fa-caret-down text-[10px]"></i></div>
+                        </div>
+                        <div class="flex-grow relative h-11">
+                            <input type="text" id="line-input" class="w-full h-full bg-slate-900 text-white text-sm rounded-xl pl-4 pr-11 border border-slate-600 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none transition-all placeholder-slate-500 shadow-inner" placeholder="Ketik dialog..." autocomplete="off">
+                            <button type="submit" class="absolute right-1.5 top-1.5 bottom-1.5 w-8 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg flex items-center justify-center shadow-sm transition-all active:scale-95" title="Kirim"><i class="fa-solid fa-paper-plane text-xs"></i></button>
+                        </div>
+                    </form>
+                    <div class="flex justify-between items-center px-1 mb-3">
+                         <p class="text-[9px] text-slate-500 flex items-center gap-1.5 opacity-80 bg-slate-900/50 px-2 py-0.5 rounded border border-slate-700/50"><span class="font-bold text-sky-400">Enter ↵</span> untuk kirim</p>
                     </div>
-                    <div class="bg-slate-800 p-2 rounded border border-slate-700/50">
-                        <strong class="block text-pink-400 mb-1"><i class="fa-solid fa-crown"></i> Princess</strong>
-                        Pilih suara <b>Aoede/Kore</b> + Style <b>Princess</b>.
-                    </div>
-                    <div class="bg-slate-800 p-2 rounded border border-slate-700/50">
-                        <strong class="block text-blue-400 mb-1"><i class="fa-solid fa-shield-halved"></i> Knight</strong>
-                        Pilih suara <b>Zephyr/Fenrir</b> + Style <b>Knight</b>.
+                    <div class="flex gap-2 pt-3 border-t border-slate-700/50">
+                        <button onclick="playDialogue()" id="btn-dialog-play" class="flex-grow bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white font-bold py-3 rounded-xl shadow-md transition-all active:scale-[0.98] text-xs flex justify-center items-center gap-2">
+                            <i class="fa-solid fa-film"></i> Generate Scene
+                        </button>
+                        <button onclick="exportDialogue()" id="btn-dialog-download" class="w-12 bg-emerald-700/80 text-emerald-100 rounded-xl hover:bg-emerald-600 border border-emerald-600/30 transition-all flex items-center justify-center hidden" title="Download WAV"><i class="fa-solid fa-download"></i></button>
+                        <button onclick="clearChat()" class="w-12 bg-slate-700/50 text-slate-400 rounded-xl hover:bg-red-900/40 hover:text-red-400 border border-slate-600/50 hover:border-red-500/30 transition-all flex items-center justify-center" title="Hapus Chat"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
                 </div>
-            </div>
-
-            <!-- Limit Info -->
-            <div>
-                <h4 class="text-xs font-bold text-sky-300 uppercase mb-2 flex items-center gap-2">
-                    <i class="fa-solid fa-triangle-exclamation"></i> Info Limit Gratis
-                </h4>
-                <div class="flex gap-4 text-[10px] text-slate-400 bg-slate-800/30 p-2 rounded">
-                    <div><span class="text-emerald-400 font-bold">Kecepatan:</span> ~15 x / menit</div>
-                    <div><span class="text-emerald-400 font-bold">Harian:</span> ~1.500 x Generate</div>
-                </div>
-                <p class="text-[9px] text-slate-500 mt-1 italic">*Kuota reset setiap hari pukul 14.00/15.00 WIB.</p>
             </div>
         </div>
 
+        <div class="flex justify-center h-10 gap-1.5 items-end opacity-50 transition-opacity duration-300 mt-2" id="visualizer">
+            <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        </div>
+        <audio id="audio-player" class="w-full hidden" controls></audio>
+        <div id="status-bar" class="fixed bottom-0 left-0 w-full bg-slate-900/90 border-t border-slate-700 p-2 text-center text-[10px] text-sky-400 font-mono hidden backdrop-blur-sm z-50">Ready</div>
+
+        <!-- Info Panel -->
+        <div class="glass-panel p-4 border-t-4 border-slate-600 space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-slate-800/50 p-3 rounded-lg border border-slate-700/50">
+                     <h4 class="text-[10px] font-bold text-amber-400 uppercase mb-2"><i class="fa-solid fa-lightbulb"></i> Tips Karakter</h4>
+                     <ul class="text-[9px] text-slate-400 space-y-1">
+                        <li>🔥 <b>Demon:</b> Suara Fenrir + Style Demon</li>
+                        <li>👑 <b>Princess:</b> Suara Aoede + Style Princess</li>
+                        <li>🎙️ <b>Youtuber:</b> Suara Puck + Style Streamer</li>
+                     </ul>
+                </div>
+                <div class="bg-slate-800/50 p-3 rounded-lg border border-slate-700/50">
+                    <h4 class="text-[10px] font-bold text-sky-400 uppercase mb-2"><i class="fa-solid fa-gauge"></i> Limit Gratis</h4>
+                    <ul class="text-[9px] text-slate-400 space-y-1">
+                        <li>⚡ <b>Kecepatan:</b> ~15x per menit</li>
+                        <li>📅 <b>Harian:</b> ~1.500x per hari</li>
+                        <li class="text-slate-500 italic">Reset tiap pukul 14.00 WIB</li>
+                    </ul>
+               </div>
+            </div>
+        </div>
     </main>
 
-    <!-- Toast -->
-    <div id="toast" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white px-4 py-2 rounded-full shadow-2xl border border-slate-600 text-sm opacity-0 pointer-events-none transition-opacity duration-300 z-50 whitespace-nowrap">Msg</div>
+    <div id="toast" class="fixed top-20 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white px-5 py-3 rounded-full shadow-2xl border border-slate-600 text-xs font-medium opacity-0 pointer-events-none transition-all duration-300 z-50 whitespace-nowrap translate-y-5">Msg</div>
 
     <script>
-        // --- COMPLETE PROMPT MAPS ---
-        
-        const styleMap = {
-            "normal": "Speak naturally.",
-            "cheerfully": "in a very happy, cheerful, and energetic voice",
-            "sadly": "in a sad, melancholic, and tearful voice",
-            "excitedly": "in an excited, high-energy, and enthusiastic voice",
-            "angrily": "in an angry, loud, and furious voice",
-            "scared": "in a scared, trembling, and nervous voice",
-            "whisper": "in a soft, breathy whisper",
-            "melodramatic": "in an exaggerated, dramatic soap-opera style",
-            "heartbroken": "in a broken, sobbing, and deeply sorrowful voice",
-            "villain": "in a sinister, cunning, and calculating villain voice",
-            "confused": "in a confused, hesitant, and questioning tone",
-            "inner_monologue": "in a soft, echoey, introspective internal voice",
-            "comedian": "like a stand-up comedian with punchy delivery",
-            "laughing": "while suppressing laughter and giggling",
-            "goofy": "in a silly, goofy, cartoonish voice",
-            "sarcastic": "in a dry, witty, and sarcastic tone",
-            "podcaster": "in a friendly, conversational, and warm podcaster tone",
-            "streamer": "in a hype, loud, and fast-paced streamer voice",
-            "reviewer": "in a crisp, articulate, and knowledgeable tech-reviewer tone",
-            "motivator": "in an inspiring, powerful, and confident voice",
-            "news": "in a formal, steady, and professional news anchor voice",
-            "demon": "in a deep, guttural, and terrifying demon voice",
-            "knight": "in a brave, resonant, and authoritative knight voice",
-            "princess": "in a soft, elegant, and high-pitched princess voice",
-            "wizard": "in a raspy, old, creaky, and wise voice",
-            "monster": "in a growling, beast-like monster voice",
-            "ghost": "in a breathy, hollow, spectral, and eerie voice",
-            "robot": "in a flat, staccato, monotone robotic rhythm"
+        const aiVoices = [ { name: "Kore", gender: "Female", desc: "Calm/Standard" }, { name: "Fenrir", gender: "Male", desc: "Deep/Berat" }, { name: "Puck", gender: "Male", desc: "Energetic/Ceria" }, { name: "Zephyr", gender: "Female", desc: "Professional/News" }, { name: "Aoede", gender: "Female", desc: "Elegant/Anggun" }, { name: "Charon", gender: "Male", desc: "Gravelly/Serak" } ];
+        const styleMap = { "normal": "Speak naturally.", "cheerfully": "in a very happy voice", "sadly": "in a sad voice", "excitedly": "in an excited high-energy voice", "angrily": "in an angry voice", "scared": "in a scared trembling voice", "whisper": "in a soft whisper", "melodramatic": "in an exaggerated dramatic soap-opera style", "heartbroken": "in a broken sobbing voice", "villain": "in a sinister villain voice", "confused": "in a confused tone", "inner_monologue": "in a soft echoey thought voice", "comedian": "like a stand-up comedian", "laughing": "while suppressing laughter", "goofy": "in a silly goofy voice", "sarcastic": "in a sarcastic tone", "podcaster": "in a friendly podcast tone", "streamer": "in a loud hype streamer voice", "reviewer": "in a crisp tech-reviewer tone", "motivator": "in an inspiring confident voice", "news": "in a formal news anchor voice", "demon": "in a deep terrifying demon voice", "knight": "in a brave noble voice", "princess": "in a soft elegant princess voice", "wizard": "in a raspy old wizard voice", "monster": "in a growling monster voice", "ghost": "in a spooky ghost voice", "robot": "in a flat robotic voice" };
+        const modMap = { "deep": "Make voice deeper.", "high": "Make voice higher pitched.", "slow": "Speak slowly.", "fast": "Speak quickly." };
+        const contextMap = { "intro": "Context: Intro video.", "outro": "Context: Outro video.", "unboxing": "Context: Unboxing.", "tutorial": "Context: Tutorial.", "promo": "Context: Commercial.", "vlog": "Context: Vlog.", "creepypasta": "Context: Scary story.", "soap_opera": "Context: TV Drama.", "breakup": "Context: Breakup.", "confession": "Context: Secret.", "flashback": "Context: Memory.", "dying": "Context: Dying.", "prank": "Context: Prank.", "standup": "Context: Comedy.", "fail": "Context: Fail moment.", "battle_shout": "Context: War cry.", "victory": "Context: Victory." };
+
+        let mode = 'ai'; let dialogueLines = []; let standardVoices = []; let voiceHistory = []; let loadInterval;
+        const synth = window.speechSynthesis; const AudioContext = window.AudioContext || window.webkitAudioContext;
+
+        const els = {
+            textInput: document.getElementById('text-input'), voiceSelect: document.getElementById('voice-select'), aiConfig: document.getElementById('ai-config'), aiControls: document.getElementById('ai-controls'),
+            stdControls: document.getElementById('standard-controls'), voiceDesc: document.getElementById('voice-desc'), refreshBtn: document.getElementById('refresh-voices-btn'), styleSelect: document.getElementById('style-select'),
+            contextSelect: document.getElementById('context-select'), modSelect: document.getElementById('voice-mod-select'), langSelect: document.getElementById('ai-language-select'), customPromptContainer: document.getElementById('custom-prompt-container'),
+            customPromptInput: document.getElementById('custom-prompt-input'), debugContainer: document.getElementById('debug-container'), debugPrompt: document.getElementById('debug-prompt'), visualizer: document.getElementById('visualizer'),
+            audioPlayer: document.getElementById('audio-player'), statusBar: document.getElementById('status-bar'), historyContainer: document.getElementById('history-container'), historyList: document.getElementById('history-list'), btnDialogDownload: document.getElementById('btn-dialog-download')
         };
-
-        const modMap = {
-            "deep": "Make the voice noticeably deeper and heavier.",
-            "high": "Make the voice noticeably higher pitched and lighter.",
-            "slow": "Speak very slowly, enunciating every syllable.",
-            "fast": "Speak very quickly and rapidly.",
-            "slow_deep": "Speak extremely slowly with a massive, deep rumble."
-        };
-
-        const contextMap = {
-            "intro": "Context: Introducing a video enthusiastically.",
-            "outro": "Context: Thanking viewers warmly at the end of a video.",
-            "unboxing": "Context: Excitedly unboxing a new product.",
-            "tutorial": "Context: Explaining steps clearly and patiently.",
-            "promo": "Context: announcing a fast-paced commercial.",
-            "vlog": "Context: talking casually to a camera while walking.",
-            "creepypasta": "Context: narrating a scary story slowly.",
-            "soap_opera": "Context: acting in a dramatic TV scene.",
-            "breakup": "Context: having a painful breakup conversation.",
-            "confession": "Context: whispering a secret confession.",
-            "flashback": "Context: narrating a distant memory.",
-            "dying": "Context: speaking final words weakly.",
-            "prank": "Context: playing a mischievous prank.",
-            "standup": "Context: performing on a comedy stage.",
-            "fail": "Context: reacting to a funny accident.",
-            "battle_shout": "Context: shouting on a battlefield.",
-            "victory": "Context: celebrating a huge win."
-        };
-
-        // --- State ---
-        let mode = 'ai';
-        let standardVoices = [];
-        let loadInterval;
-        const synth = window.speechSynthesis;
-        
-        const aiVoices = [
-            { name: "Kore", gender: "Female", style: "Calm" },
-            { name: "Fenrir", gender: "Male", style: "Deep" },
-            { name: "Puck", gender: "Male", style: "Energetic" },
-            { name: "Zephyr", gender: "Female", style: "Professional" },
-            { name: "Aoede", gender: "Female", style: "Elegant" },
-            { name: "Charon", gender: "Male", style: "Gravelly" }
-        ];
-
-        // --- Elements ---
-        const textInput = document.getElementById('text-input');
-        const voiceSelect = document.getElementById('voice-select');
-        const speakBtn = document.getElementById('speak-btn');
-        const apiKeyInput = document.getElementById('api-key');
-        const aiConfig = document.getElementById('ai-config');
-        const aiControls = document.getElementById('ai-controls');
-        const stdControls = document.getElementById('standard-controls');
-        const refreshBtn = document.getElementById('refresh-voices-btn');
-        
-        const styleSelect = document.getElementById('style-select');
-        const langSelect = document.getElementById('ai-language-select');
-        const contextSelect = document.getElementById('context-select');
-        const voiceModSelect = document.getElementById('voice-mod-select');
-        const customPromptContainer = document.getElementById('custom-prompt-container');
-        const customPromptInput = document.getElementById('custom-prompt-input');
-        const debugContainer = document.getElementById('debug-container');
-        const debugPrompt = document.getElementById('debug-prompt');
-        
-        const visualizer = document.getElementById('visualizer');
-        const audioPlayer = document.getElementById('audio-player');
-        const voiceDesc = document.getElementById('voice-desc');
 
         function init() {
-            loadInterval = setInterval(forceReloadVoices, 500);
-            setTimeout(() => clearInterval(loadInterval), 3000); 
-            if (speechSynthesis.onvoiceschanged !== undefined) {
-                speechSynthesis.onvoiceschanged = populateStandardVoices;
-            }
-            setMode('ai');
+            const populate = (id, data, isVoice) => {
+                const el = document.getElementById(id); el.innerHTML = "";
+                data.forEach(d => { const opt = document.createElement("option"); if(isVoice) { opt.value = d.name; opt.text = `${d.name}`; } else { opt.value = d[0]; opt.text = d[1]; } el.add(opt); });
+            };
+            populate("voice-a", aiVoices, true); populate("voice-b", aiVoices, true); document.getElementById("voice-b").selectedIndex = 1;
+            const simpleStyles = Object.keys(styleMap).map(k => [k, k.charAt(0).toUpperCase() + k.slice(1).replace('_', ' ')]);
+            populate("style-a", simpleStyles, false); populate("style-b", simpleStyles, false);
+            setEngine('ai'); loadInterval = setInterval(forceReloadVoices, 500); setTimeout(() => clearInterval(loadInterval), 3000);
+            if (speechSynthesis.onvoiceschanged !== undefined) speechSynthesis.onvoiceschanged = populateStandardVoices;
         }
 
-        window.setMode = (newMode) => {
-            mode = newMode;
-            updateUI();
-            
-            const btnStd = document.getElementById('btn-std');
-            const btnAi = document.getElementById('btn-ai');
-            
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active', 'text-sky-400', 'bg-sky-500/10'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.add('text-slate-400'));
+            document.getElementById(`tab-${tab}`).classList.add('active', 'text-sky-400', 'bg-sky-500/10');
+            document.getElementById('monologue-section').classList.toggle('hidden', tab !== 'monologue');
+            document.getElementById('dialogue-section').classList.toggle('hidden', tab !== 'dialogue');
+        }
+
+        window.setEngine = (newMode) => {
+            mode = newMode; updateUI(); const btnStd = document.getElementById('btn-std'), btnAi = document.getElementById('btn-ai');
             if(mode === 'standard') {
-                btnStd.className = "px-4 py-2 rounded-full text-xs font-bold transition-all bg-sky-600 text-white shadow-lg";
-                btnAi.className = "px-4 py-2 rounded-full text-xs font-bold transition-all text-slate-400 hover:text-white";
-                aiConfig.classList.add('hidden');
-                voiceDesc.classList.add('hidden');
-                aiControls.classList.add('hidden');
-                stdControls.classList.remove('hidden');
-                refreshBtn.classList.remove('hidden'); 
+                btnStd.className = "px-3 py-1.5 rounded-md text-[10px] font-bold bg-sky-600 text-white shadow-md transition-all"; btnAi.className = "px-3 py-1.5 rounded-md text-[10px] font-bold text-slate-400 hover:text-white transition-all";
+                els.aiConfig.classList.add('hidden'); els.voiceDesc.classList.add('hidden'); els.aiControls.classList.add('hidden'); els.stdControls.classList.remove('hidden'); els.refreshBtn.classList.remove('hidden'); els.historyContainer.classList.add('hidden');
                 if(standardVoices.length === 0) forceReloadVoices();
             } else {
-                btnAi.className = "px-4 py-2 rounded-full text-xs font-bold transition-all bg-sky-600 text-white shadow-lg";
-                btnStd.className = "px-4 py-2 rounded-full text-xs font-bold transition-all text-slate-400 hover:text-white";
-                aiConfig.classList.remove('hidden');
-                voiceDesc.classList.remove('hidden');
-                aiControls.classList.remove('hidden');
-                stdControls.classList.add('hidden');
-                refreshBtn.classList.add('hidden');
+                btnAi.className = "px-3 py-1.5 rounded-md text-[10px] font-bold bg-sky-600 text-white shadow-md transition-all"; btnStd.className = "px-3 py-1.5 rounded-md text-[10px] font-bold text-slate-400 hover:text-white transition-all";
+                els.aiConfig.classList.remove('hidden'); els.voiceDesc.classList.remove('hidden'); els.aiControls.classList.remove('hidden'); els.stdControls.classList.add('hidden'); els.refreshBtn.classList.add('hidden');
+                if(voiceHistory.length > 0) els.historyContainer.classList.remove('hidden');
             }
         };
 
-        window.toggleDebug = () => { debugContainer.classList.toggle('hidden'); };
-        window.forceReloadVoices = () => {
-            const currentVoices = synth.getVoices();
-            if (currentVoices.length > 0 && (currentVoices.length !== standardVoices.length || voiceSelect.options.length <= 1)) {
-                standardVoices = currentVoices;
-                if(mode === 'standard') populateStandardVoices();
-            }
-        };
-
-        styleSelect.addEventListener('change', () => {
-            if(styleSelect.value === 'custom') {
-                customPromptContainer.classList.remove('hidden');
-            } else {
-                customPromptContainer.classList.add('hidden');
-            }
-        });
-
-        function updateUI() {
-            if (mode === 'standard') {
-                populateStandardVoices();
-            } else {
-                voiceSelect.innerHTML = ''; 
-                aiVoices.forEach(v => {
-                    const opt = document.createElement('option');
-                    opt.value = v.name;
-                    opt.text = `✨ ${v.name} (${v.gender})`;
-                    voiceSelect.add(opt);
-                });
-                updateVoiceDesc();
-            }
-        }
-
+        function updateUI() { if (mode === 'standard') { populateStandardVoices(); } else { els.voiceSelect.innerHTML = ''; aiVoices.forEach(v => { const opt = document.createElement('option'); opt.value = v.name; opt.text = `✨ ${v.name} (${v.desc})`; els.voiceSelect.add(opt); }); updateVoiceDesc(); } }
         function populateStandardVoices() {
-            if(mode !== 'standard') return;
-            standardVoices = synth.getVoices();
-            if(standardVoices.length === 0) {
-                if (!voiceSelect.innerHTML.includes("Tidak ada suara")) {
-                    voiceSelect.innerHTML = '';
-                    const opt = document.createElement('option');
-                    opt.text = "Tidak ada suara (Tekan tombol 🔄)";
-                    voiceSelect.add(opt);
-                }
-            } else {
-                const previousSelection = voiceSelect.value;
-                voiceSelect.innerHTML = '';
-                let sortedVoices = [...standardVoices].sort((a,b) => a.name.localeCompare(b.name));
-                let count = 0;
-                sortedVoices.forEach(v => {
-                    if(v.lang.includes('id') || v.lang.includes('in_ID')) { 
-                        const opt = document.createElement('option');
-                        opt.value = v.name;
-                        opt.text = `🇮🇩 ${v.name}`;
-                        voiceSelect.add(opt);
-                        count++;
-                    }
-                });
-                if(count === 0 || standardVoices.length < 20) {
-                     sortedVoices.forEach(v => {
-                        if(!v.lang.includes('id') && !v.lang.includes('in_ID')) {
-                            const opt = document.createElement('option');
-                            opt.value = v.name;
-                            opt.text = v.name;
-                            voiceSelect.add(opt);
-                        }
-                    });
-                }
-                if (previousSelection) voiceSelect.value = previousSelection;
-            }
+            if(mode !== 'standard') return; standardVoices = synth.getVoices();
+            if(standardVoices.length === 0) { if (!els.voiceSelect.innerHTML.includes("Tidak ada")) { els.voiceSelect.innerHTML = ''; const opt = document.createElement('option'); opt.text = "Tidak ada suara (Tekan tombol 🔄)"; els.voiceSelect.add(opt); } } 
+            else { const prev = els.voiceSelect.value; els.voiceSelect.innerHTML = ''; let sorted = [...standardVoices].sort((a,b) => a.name.localeCompare(b.name)); let count = 0; sorted.forEach(v => { if(v.lang.includes('id') || v.lang.includes('in_ID')) { const opt = document.createElement('option'); opt.value = v.name; opt.text = `🇮🇩 ${v.name}`; els.voiceSelect.add(opt); count++; } }); if(count === 0 || standardVoices.length < 20) { sorted.forEach(v => { if(!v.lang.includes('id') && !v.lang.includes('in_ID')) { const opt = document.createElement('option'); opt.value = v.name; opt.text = v.name; els.voiceSelect.add(opt); } }); } if(prev) els.voiceSelect.value = prev; }
         }
-        
-        voiceSelect.addEventListener('change', () => { if(mode === 'ai') updateVoiceDesc(); });
+        window.forceReloadVoices = () => { const current = synth.getVoices(); if (current.length > 0) { standardVoices = current; if(mode === 'standard') populateStandardVoices(); } };
+        function updateVoiceDesc() { const val = els.voiceSelect.value; const v = aiVoices.find(x => x.name === val); if(v) els.voiceDesc.textContent = `Style: ${v.desc}`; }
+        els.styleSelect.addEventListener('change', () => { els.customPromptContainer.classList.toggle('hidden', els.styleSelect.value !== 'custom'); document.getElementById('context-container').classList.toggle('hidden', els.styleSelect.value === 'custom'); });
+        window.toggleDebug = () => els.debugContainer.classList.toggle('hidden'); window.clearText = () => els.textInput.value = '';
 
-        function updateVoiceDesc() {
-            const selectedName = voiceSelect.value;
-            const voice = aiVoices.find(v => v.name === selectedName);
-            if(voice) voiceDesc.textContent = `Style: ${voice.style}`;
+        function addToHistory(text, voice, style, blob) {
+            const id = Date.now(); voiceHistory.unshift({ id, text, voice, style, blob }); if (voiceHistory.length > 10) voiceHistory.pop(); renderHistory();
         }
+        function renderHistory() {
+            if(voiceHistory.length > 0) els.historyContainer.classList.remove('hidden');
+            els.historyList.innerHTML = voiceHistory.map(item => `<div class="bg-slate-800/50 p-3 rounded-xl border border-slate-700 flex items-center justify-between gap-3 group hover:border-slate-500 transition-colors"><div class="min-w-0 flex-grow"><div class="flex items-center gap-2 text-[10px] text-slate-400 mb-1"><span class="bg-slate-700/50 px-1.5 py-0.5 rounded text-sky-400 font-bold">${item.voice}</span><span class="truncate max-w-[100px]">${item.style}</span></div><p class="text-xs text-slate-200 truncate font-medium">${item.text}</p></div><div class="flex items-center gap-2"><button onclick="playBlobFromHistory(${item.id})" class="w-8 h-8 rounded-lg bg-sky-600/20 text-sky-400 hover:bg-sky-600 hover:text-white flex items-center justify-center transition-colors"><i class="fa-solid fa-play text-xs"></i></button><button onclick="downloadHistoryItem(${item.id})" class="w-8 h-8 rounded-lg bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors"><i class="fa-solid fa-download text-xs"></i></button></div></div>`).join('');
+        }
+        window.playBlobFromHistory = (id) => { const item = voiceHistory.find(i => i.id === id); if(item) playBlob(item.blob, () => {}); };
+        window.downloadHistoryItem = (id) => { const item = voiceHistory.find(i => i.id === id); if(item) downloadBlob(item.blob, `voice_${item.voice}_${item.id}.wav`); };
 
-        speakBtn.onclick = async () => {
-            const text = textInput.value.trim();
-            if (!text) return showToast("Masukkan teks terlebih dahulu!");
-            setLoading(true);
-            if (mode === 'standard') playStandard(text);
-            else await playAI(text);
+        document.getElementById('speak-btn').onclick = async () => {
+            const text = els.textInput.value.trim(); if (!text) return showToast("Masukkan teks dulu!"); setLoading(document.getElementById('speak-btn'), true);
+            if (mode === 'standard') playStandard(text); else { try { const blob = await playAI(text); if(blob) addToHistory(text, els.voiceSelect.value, els.styleSelect.value, blob); } catch(e) {} }
         };
 
-        function playStandard(text) {
-            if (synth.speaking) synth.cancel();
-            const utter = new SpeechSynthesisUtterance(text);
-            if(voiceSelect.value.includes("Tidak ada suara")) {
-                setLoading(false);
-                return showToast("Gagal: HP Anda belum memuat suara. Tekan tombol 🔄 di samping.");
+        async function playAI(text, specificVoice, specificStyle) {
+            const apiKey = document.getElementById('api-key').value.trim(); if(!apiKey) { setLoading(document.getElementById('speak-btn'), false); return showToast("⚠️ Masukkan API Key!"); }
+            const vName = specificVoice || els.voiceSelect.value; const sKey = specificStyle || els.styleSelect.value; const lang = els.langSelect.value;
+            let instruction = "";
+            if(sKey === 'custom' && !specificStyle) { instruction = els.customPromptInput.value; } else {
+                const baseStyle = styleMap[sKey] || "Speak naturally."; const contextStr = (!specificStyle && els.contextSelect.value) ? (contextMap[els.contextSelect.value] || "") : ""; const modStr = (!specificStyle && els.modSelect.value) ? (modMap[els.modSelect.value] || "") : "";
+                instruction = `Speak in ${lang}. ${baseStyle} ${modStr} ${contextStr}`;
             }
-            const selectedName = voiceSelect.value;
-            const voice = standardVoices.find(v => v.name === selectedName);
-            if(voice) utter.voice = voice;
-            utter.pitch = document.getElementById('pitch').value;
-            utter.rate = document.getElementById('rate').value;
-            utter.onstart = () => { visualizer.classList.add('animating'); visualizer.classList.remove('opacity-50'); };
-            utter.onend = () => { setLoading(false); visualizer.classList.remove('animating'); visualizer.classList.add('opacity-50'); };
-            utter.lang = 'id-ID'; 
-            synth.speak(utter);
-        }
-
-        async function playAI(text) {
-            const key = apiKeyInput.value.trim();
-            if (!key) {
-                setLoading(false);
-                apiKeyInput.classList.add('ring-2', 'ring-red-500');
-                setTimeout(() => apiKeyInput.classList.remove('ring-2', 'ring-red-500'), 1000);
-                apiKeyInput.focus();
-                return showToast("⚠️ Masukkan API Key!");
-            }
-
-            const voiceName = voiceSelect.value;
-            const lang = langSelect.value;
-            const styleKey = styleSelect.value;
-            const modKey = voiceModSelect.value;
-            const contextKey = contextSelect.value;
-            
-            let parts = [];
-            
-            if (styleKey === 'custom') {
-                parts.push(customPromptInput.value.trim());
-            } else {
-                parts.push(`Instruction: Speak in ${lang}.`);
-                if(styleMap[styleKey]) parts.push(`Character Style: ${styleMap[styleKey]}`);
-                if(contextMap[contextKey]) parts.push(`Situational Tone: ${contextMap[contextKey]}`);
-                if(modMap[modKey]) parts.push(`Voice Modification: ${modMap[modKey]}`);
-            }
-
-            let instruction = parts.join(" ");
-            const finalText = `${instruction} Content: "${text}"`;
-            debugPrompt.value = finalText;
-
+            const prompt = `${instruction} Content: "${text}"`; if(!specificVoice) els.debugPrompt.value = prompt;
             try {
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${key}`;
-                const payload = {
-                    contents: [{ parts: [{ text: finalText }] }],
-                    generationConfig: {
-                        responseModalities: ["AUDIO"],
-                        speechConfig: {
-                            voiceConfig: { prebuiltVoiceConfig: { voiceName: voiceName } }
-                        }
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+                const resp = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: vName } } } } }) });
+                if (!resp.ok) throw new Error((await resp.json()).error?.message || "API Error");
+                const data = await resp.json(); const audioBlob = base64ToBlob(data.candidates[0].content.parts[0].inlineData.data);
+                if(!specificVoice) { playBlob(audioBlob, () => setLoading(document.getElementById('speak-btn'), false)); return audioBlob; } else { return audioBlob; }
+            } catch (e) { console.error(e); showToast(e.message); if(!specificVoice) setLoading(document.getElementById('speak-btn'), false); else throw e; }
+        }
+
+        function renderChat() {
+            const container = document.getElementById('chat-container'); container.innerHTML = dialogueLines.length === 0 ? '<div class="flex flex-col items-center justify-center h-full text-slate-500 opacity-60 mt-8"><i class="fa-regular fa-comments text-3xl mb-2"></i><span class="text-xs">Belum ada percakapan</span></div>' : '';
+            dialogueLines.forEach((line, index) => {
+                const div = document.createElement('div'); div.className = `chat-row speaker-${line.speaker.toLowerCase()}`; div.id = `chat-line-${index}`;
+                div.innerHTML = `<div class="chat-bubble shadow-md group relative"><button onclick="deleteLine(${index})" class="delete-btn"><i class="fa-solid fa-times"></i></button><strong class="block text-[10px] opacity-70 mb-1">${line.speaker==='A'?'Speaker A':'Speaker B'}</strong>${line.text}</div>`; container.appendChild(div);
+            });
+            container.scrollTop = container.scrollHeight;
+            if(dialogueLines.some(l => l.audio)) els.btnDialogDownload.classList.remove('hidden'); else els.btnDialogDownload.classList.add('hidden');
+        }
+
+        window.addLine = () => { const s = document.getElementById('speaker-select').value; const t = document.getElementById('line-input').value.trim(); if(!t) return; dialogueLines.push({ speaker: s, text: t, audio: null, voice: null, style: null }); renderChat(); document.getElementById('line-input').value = ''; };
+        window.deleteLine = (index) => { dialogueLines.splice(index, 1); renderChat(); };
+        window.clearChat = () => { dialogueLines = []; renderChat(); };
+
+        window.playDialogue = async () => {
+            if(dialogueLines.length === 0) return showToast("Isi dialog dulu!");
+            const btn = document.getElementById('btn-dialog-play'); setLoading(btn, true, "Generating Scene..."); els.statusBar.classList.remove('hidden');
+            try {
+                let queue = [];
+                for(let i=0; i<dialogueLines.length; i++) {
+                    const line = dialogueLines[i];
+                    const v = document.getElementById(line.speaker === 'A' ? 'voice-a' : 'voice-b').value;
+                    const s = document.getElementById(line.speaker === 'A' ? 'style-a' : 'style-b').value;
+                    
+                    // SAFE MODE DELAY (4s)
+                    if(i>0) {
+                        for(let d=4; d>0; d--) { els.statusBar.textContent = `Cooldown limit: ${d}s...`; await new Promise(r => setTimeout(r, 1000)); }
                     }
-                };
-
-                const response = await fetch(url, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) {
-                    const errData = await response.json();
-                    throw new Error(errData.error?.message || response.statusText);
+                    
+                    if (line.audio && line.voice === v && line.style === s) { els.statusBar.textContent = `Using Cache line ${i+1}...`; queue.push(line.audio); } 
+                    else { els.statusBar.textContent = `Generating line ${i+1}/${dialogueLines.length}...`; const blob = await playAI(line.text, v, s); line.audio = blob; line.voice = v; line.style = s; queue.push(blob); }
                 }
-
-                const data = await response.json();
-                const base64Audio = data.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
-
-                if (base64Audio) {
-                    playPcmAudio(base64Audio);
-                } else {
-                    throw new Error("No audio data received");
+                renderChat(); els.statusBar.textContent = "Playing Scene...";
+                for(let i=0; i<queue.length; i++) {
+                    const bubbles = document.querySelectorAll('.chat-bubble'); bubbles.forEach(b => b.classList.remove('playing-now'));
+                    if(document.getElementById(`chat-line-${i}`)) { const active = document.getElementById(`chat-line-${i}`).querySelector('.chat-bubble'); active.classList.add('playing-now'); active.scrollIntoView({ behavior: "smooth", block: "center" }); }
+                    await new Promise(resolve => playBlob(queue[i], resolve));
                 }
-            } catch (error) {
-                console.error(error);
-                let msg = error.message;
-                if(msg.includes("429")) msg = "Limit API Harian Habis. Coba besok.";
-                if(msg.includes("key")) msg = "API Key Salah.";
-                showToast(msg);
-                setLoading(false);
-            }
+                document.querySelectorAll('.chat-bubble').forEach(b => b.classList.remove('playing-now'));
+            } catch(e) { showToast(e.message); } finally { setLoading(btn, false, '<i class="fa-solid fa-film"></i> Generate & Play Scene'); els.statusBar.classList.add('hidden'); }
         }
 
-        function playPcmAudio(base64) {
-            const binaryString = window.atob(base64);
-            const len = binaryString.length;
-            const bytes = new Uint8Array(len);
-            for (let i = 0; i < len; i++) { bytes[i] = binaryString.charCodeAt(i); }
-            const wavBytes = pcmToWav(bytes, 24000);
-            const blob = new Blob([wavBytes], { type: 'audio/wav' });
-            const url = URL.createObjectURL(blob);
-            audioPlayer.src = url;
-            audioPlayer.classList.remove('hidden');
-            audioPlayer.onplay = () => { visualizer.classList.add('animating'); visualizer.classList.remove('opacity-50'); };
-            audioPlayer.onended = () => { visualizer.classList.remove('animating'); visualizer.classList.add('opacity-50'); setLoading(false); };
-            audioPlayer.play();
-        }
+        window.exportDialogue = async () => {
+            if(!dialogueLines.some(l => l.audio)) return showToast("Play scene dulu!"); els.statusBar.classList.remove('hidden'); els.statusBar.textContent = "Merging Audio...";
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)(); const buffers = [];
+                for(const line of dialogueLines) { if(!line.audio) continue; const ab = await line.audio.arrayBuffer(); const b = await audioCtx.decodeAudioData(ab); buffers.push(b); }
+                if(buffers.length === 0) throw new Error("No data");
+                const totalLen = buffers.reduce((acc, b) => acc + b.length, 0); const out = audioCtx.createBuffer(1, totalLen, buffers[0].sampleRate);
+                const data = out.getChannelData(0); let off = 0;
+                for(const buff of buffers) { data.set(buff.getChannelData(0), off); off += buff.length; }
+                downloadBlob(audioBufferToWavBlob(out), "dialogue_scene.wav"); showToast("Download Started!");
+            } catch(e) { console.error(e); showToast("Gagal Export"); } finally { els.statusBar.classList.add('hidden'); }
+        };
 
-        function pcmToWav(pcmData, sampleRate) {
-            const wavHeader = new ArrayBuffer(44);
-            const view = new DataView(wavHeader);
-            const byteRate = sampleRate * 2; 
-            const blockAlign = 2;
-            writeString(view, 0, 'RIFF');
-            view.setUint32(4, 36 + pcmData.length, true);
-            writeString(view, 8, 'WAVE');
-            writeString(view, 12, 'fmt ');
-            view.setUint32(16, 16, true);
-            view.setUint16(20, 1, true);
-            view.setUint16(22, 1, true);
-            view.setUint32(24, sampleRate, true);
-            view.setUint32(28, byteRate, true);
-            view.setUint16(32, blockAlign, true);
-            view.setUint16(34, 16, true);
-            writeString(view, 36, 'data');
-            view.setUint32(40, pcmData.length, true);
-            const wavBuffer = new Uint8Array(44 + pcmData.length);
-            wavBuffer.set(new Uint8Array(wavHeader), 0);
-            wavBuffer.set(pcmData, 44);
-            return wavBuffer;
+        function base64ToBlob(b64) { const bin = atob(b64); const len = bin.length; const bytes = new Uint8Array(len); for (let i = 0; i < len; i++) bytes[i] = bin.charCodeAt(i); return pcmToWav(bytes, 24000); }
+        function pcmToWav(pcm, rate) {
+            const h = new ArrayBuffer(44); const v = new DataView(h); const wS = (o, s) => { for(let i=0;i<s.length;i++) v.setUint8(o+i, s.charCodeAt(i)); };
+            wS(0,'RIFF'); v.setUint32(4,36+pcm.length,true); wS(8,'WAVEfmt '); v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true); v.setUint32(24,rate,true); v.setUint32(28,rate*2,true); v.setUint16(32,2,true); v.setUint16(34,16,true); wS(36,'data'); v.setUint32(40,pcm.length,true);
+            const b = new Uint8Array(44+pcm.length); b.set(new Uint8Array(h),0); b.set(pcm,44); return new Blob([b],{type:'audio/wav'});
         }
-
-        function writeString(view, offset, string) {
-            for (let i = 0; i < string.length; i++) { view.setUint8(offset + i, string.charCodeAt(i)); }
+        function audioBufferToWavBlob(buffer) {
+            const len = buffer.length * 2 + 44; const buf = new ArrayBuffer(len); const v = new DataView(buf); const ch = buffer.getChannelData(0); let p = 0;
+            const wS = (o, s) => { for(let i=0;i<s.length;i++) v.setUint8(o+i, s.charCodeAt(i)); };
+            wS(0,'RIFF'); v.setUint32(4,len-8,true); wS(8,'WAVEfmt '); v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true); v.setUint32(24,buffer.sampleRate,true); v.setUint32(28,buffer.sampleRate*2,true); v.setUint16(32,2,true); v.setUint16(34,16,true); wS(36,'data'); v.setUint32(40,ch.length*2,true); p=44;
+            for(let i=0;i<ch.length;i++) { let s = Math.max(-1, Math.min(1, ch[i])); s = (s<0 ? s*0x8000 : s*0x7FFF)|0; v.setInt16(p,s,true); p+=2; }
+            return new Blob([v],{type:'audio/wav'});
         }
-
-        function setLoading(isLoading) {
-            if (isLoading) {
-                speakBtn.disabled = true;
-                speakBtn.innerHTML = '<div class="loader"></div> Generating...';
-            } else {
-                speakBtn.disabled = false;
-                speakBtn.innerHTML = '<i class="fa-solid fa-play"></i> Generate & Play';
-            }
-        }
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            toast.textContent = msg;
-            toast.classList.remove('opacity-0');
-            setTimeout(() => toast.classList.add('opacity-0'), 3000);
-        }
-        function clearText() { textInput.value = ''; }
-        textInput.addEventListener('input', () => { document.getElementById('charCount').textContent = textInput.value.length + " chars"; });
-
+        function playBlob(blob, onEnd) { const u = URL.createObjectURL(blob); const a = document.getElementById('audio-player'); a.src = u; a.play(); a.onended = onEnd; }
+        function downloadBlob(blob, filename) { const u = URL.createObjectURL(blob); const a = document.createElement('a'); a.style.display='none'; a.href=u; a.download=filename; document.body.appendChild(a); a.click(); window.URL.revokeObjectURL(u); }
+        function setLoading(btn, load, txt) { btn.disabled = load; btn.innerHTML = load ? `<div class="loader mr-2"></div> Processing...` : (txt || `<i class="fa-solid fa-play mr-1"></i> Generate & Play`); }
+        function showToast(m) { const t=document.getElementById('toast'); t.textContent=m; t.classList.remove('opacity-0', 'translate-y-5'); setTimeout(()=>t.classList.add('opacity-0', 'translate-y-5'), 3000); }
+        
         init();
     </script>
 </body>
