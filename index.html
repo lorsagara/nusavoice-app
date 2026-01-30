@@ -44,11 +44,11 @@
 
         .tab-btn { position: relative; transition: all 0.3s; }
         .tab-btn.active { color: #38bdf8; background: rgba(56, 189, 248, 0.05); }
-        .tab-btn.active::after { width: 60%; transform: translateX(-50%) scaleX(1); }
         .tab-btn::after {
             content: ''; position: absolute; bottom: 0; left: 50%; width: 0; height: 3px;
             background: #38bdf8; transition: all 0.3s; transform: translateX(-50%) scaleX(0); border-radius: 3px 3px 0 0;
         }
+        .tab-btn.active::after { transform: translateX(-50%) scaleX(1); width: 60%; }
 
         input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
         input[type=range]::-webkit-slider-thumb {
@@ -108,7 +108,7 @@
         <div id="ai-config" class="glass-panel p-5 relative overflow-hidden fade-in">
             <div class="absolute -top-12 -right-12 w-32 h-32 bg-sky-500/10 rounded-full blur-2xl pointer-events-none"></div>
             <label class="block text-xs font-bold text-sky-100 mb-3 flex items-center gap-2">
-                <span class="bg-sky-500/20 text-sky-400 p-1.5 rounded-md"><i class="fa-brands fa-google"></i></span> API CONFIGURATION
+                <span class="bg-sky-500/20 text-sky-400 p-1.5 rounded-md"><i class="fa-brands fa-google"></i></span> CONFIG API
             </label>
             <div class="flex gap-0 rounded-xl border border-slate-600 focus-within:border-sky-500 focus-within:ring-1 focus-within:ring-sky-500 transition-all bg-slate-900/60 overflow-hidden shadow-inner">
                 <div class="pl-3 pr-2 flex items-center justify-center bg-transparent"><i class="fa-solid fa-key text-slate-500 text-xs"></i></div>
@@ -124,7 +124,6 @@
                     <span class="flex-shrink-0 w-4 h-4 rounded-full bg-slate-700 text-sky-400 flex items-center justify-center font-bold text-[9px]">2</span> Create API Key & Copy
                 </div>
             </div>
-            <p class="text-[9px] text-emerald-500/80 mt-2 flex items-center gap-1.5 ml-1"><i class="fa-solid fa-shield-halved"></i> Key aman & tersimpan lokal di browser.</p>
         </div>
 
         <!-- Mode Tabs -->
@@ -137,7 +136,7 @@
             </button>
         </div>
 
-        <!-- === MONOLOGUE === -->
+        <!-- === MODE MONOLOG === -->
         <div id="monologue-section" class="space-y-5 fade-in">
             <div class="glass-panel p-5 space-y-4">
                 <div class="flex justify-between items-center pb-3 border-b border-slate-700/50">
@@ -175,7 +174,8 @@
                             <label class="text-[10px] font-bold text-slate-400 uppercase">Bahasa</label>
                             <div class="relative">
                                 <select id="ai-language-select" class="w-full h-10 pl-3 pr-8 rounded-lg bg-slate-800 border border-slate-600 text-white text-xs appearance-none">
-                                    <option value="Indonesian">🇮🇩 Indonesia</option><option value="Javanese">🇮🇩 Jawa</option><option value="Sundanese">🇮🇩 Sunda</option><option value="English">🇺🇸 English</option><option value="Japanese">🇯🇵 Japanese</option><option value="Korean">🇰🇷 Korean</option><option value="Chinese">🇨🇳 Chinese</option>
+                                    <option value="Indonesian">🇮🇩 Indonesia</option><option value="Javanese">🇮🇩 Jawa</option><option value="Sundanese">🇮🇩 Sunda</option>
+                                    <option value="English">🇺🇸 English</option><option value="Japanese">🇯🇵 Japanese</option><option value="Korean">🇰🇷 Korean</option><option value="Chinese">🇨🇳 Chinese</option>
                                 </select>
                                 <div class="absolute right-2 top-2.5 text-slate-400 pointer-events-none"><i class="fa-solid fa-chevron-down text-[10px]"></i></div>
                             </div>
@@ -190,7 +190,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="space-y-1.5">
                         <label class="text-[10px] font-bold text-slate-400 uppercase">Karakter & Emosi</label>
                         <div class="relative">
@@ -243,6 +243,7 @@
                     <i class="fa-solid fa-play group-hover:scale-110 transition-transform"></i> Generate & Play
                 </button>
             </div>
+            
             <div id="history-container" class="hidden mt-4">
                 <h3 class="text-xs font-bold text-slate-400 uppercase mb-3 flex items-center gap-2 ml-1"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat & Download</h3>
                 <div id="history-list" class="space-y-2"></div>
@@ -288,7 +289,7 @@
                          <p class="text-[9px] text-slate-500 flex items-center gap-1.5 opacity-80 bg-slate-900/50 px-2 py-0.5 rounded border border-slate-700/50"><span class="font-bold text-sky-400">Enter ↵</span> untuk kirim</p>
                     </div>
                     <div class="flex gap-2 pt-3 border-t border-slate-700/50">
-                        <button onclick="playDialogue()" id="btn-dialog-play" class="flex-grow bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white font-bold py-3 rounded-xl shadow-md transition-all active:scale-[0.98] text-xs flex justify-center items-center gap-2">
+                        <button onclick="playDialogue()" id="btn-dialog-play" class="flex-grow bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white font-bold py-2.5 rounded-lg shadow-md transition-all active:scale-[0.98] text-xs flex justify-center items-center gap-2">
                             <i class="fa-solid fa-film"></i> Generate Scene
                         </button>
                         <button onclick="exportDialogue()" id="btn-dialog-download" class="w-12 bg-emerald-700/80 text-emerald-100 rounded-xl hover:bg-emerald-600 border border-emerald-600/30 transition-all flex items-center justify-center hidden" title="Download WAV"><i class="fa-solid fa-download"></i></button>
@@ -405,6 +406,17 @@
             if (mode === 'standard') playStandard(text); else { try { const blob = await playAI(text); if(blob) addToHistory(text, els.voiceSelect.value, els.styleSelect.value, blob); } catch(e) {} }
         };
 
+        function playStandard(text) {
+            if (synth.speaking) synth.cancel(); const utter = new SpeechSynthesisUtterance(text);
+            if(els.voiceSelect.value.includes("Tidak ada")) { setLoading(document.getElementById('speak-btn'), false); return showToast("HP belum memuat suara."); }
+            const v = standardVoices.find(x => x.name === els.voiceSelect.value); if(v) utter.voice = v;
+            utter.pitch = document.getElementById('pitch').value; utter.rate = document.getElementById('rate').value;
+            utter.onend = () => { setLoading(document.getElementById('speak-btn'), false); els.visualizer.classList.remove('animating'); };
+            utter.onerror = () => { setLoading(document.getElementById('speak-btn'), false); els.visualizer.classList.remove('animating'); };
+            utter.onstart = () => { els.visualizer.classList.add('animating'); };
+            utter.lang = 'id-ID'; synth.speak(utter);
+        }
+
         async function playAI(text, specificVoice, specificStyle) {
             const apiKey = document.getElementById('api-key').value.trim(); if(!apiKey) { setLoading(document.getElementById('speak-btn'), false); return showToast("⚠️ Masukkan API Key!"); }
             const vName = specificVoice || els.voiceSelect.value; const sKey = specificStyle || els.styleSelect.value; const lang = els.langSelect.value;
@@ -446,16 +458,11 @@
                     const line = dialogueLines[i];
                     const v = document.getElementById(line.speaker === 'A' ? 'voice-a' : 'voice-b').value;
                     const s = document.getElementById(line.speaker === 'A' ? 'style-a' : 'style-b').value;
-                    
-                    // SAFE MODE DELAY (4s)
-                    if(i>0) {
-                        for(let d=4; d>0; d--) { els.statusBar.textContent = `Cooldown limit: ${d}s...`; await new Promise(r => setTimeout(r, 1000)); }
-                    }
-                    
-                    if (line.audio && line.voice === v && line.style === s) { els.statusBar.textContent = `Using Cache line ${i+1}...`; queue.push(line.audio); } 
-                    else { els.statusBar.textContent = `Generating line ${i+1}/${dialogueLines.length}...`; const blob = await playAI(line.text, v, s); line.audio = blob; line.voice = v; line.style = s; queue.push(blob); }
+                    if (line.audio && line.voice === v && line.style === s) { els.statusBar.textContent = `Using Cache for line ${i+1}...`; queue.push(line.audio); } 
+                    else { els.statusBar.textContent = `Generating line ${i+1}/${dialogueLines.length}...`; if(i>0) await new Promise(r => setTimeout(r, 1000)); const blob = await playAI(line.text, v, s); line.audio = blob; line.voice = v; line.style = s; queue.push(blob); }
                 }
-                renderChat(); els.statusBar.textContent = "Playing Scene...";
+                renderChat();
+                els.statusBar.textContent = "Playing Scene...";
                 for(let i=0; i<queue.length; i++) {
                     const bubbles = document.querySelectorAll('.chat-bubble'); bubbles.forEach(b => b.classList.remove('playing-now'));
                     if(document.getElementById(`chat-line-${i}`)) { const active = document.getElementById(`chat-line-${i}`).querySelector('.chat-bubble'); active.classList.add('playing-now'); active.scrollIntoView({ behavior: "smooth", block: "center" }); }
@@ -481,24 +488,6 @@
         function base64ToBlob(b64) { const bin = atob(b64); const len = bin.length; const bytes = new Uint8Array(len); for (let i = 0; i < len; i++) bytes[i] = bin.charCodeAt(i); return pcmToWav(bytes, 24000); }
         function pcmToWav(pcm, rate) {
             const h = new ArrayBuffer(44); const v = new DataView(h); const wS = (o, s) => { for(let i=0;i<s.length;i++) v.setUint8(o+i, s.charCodeAt(i)); };
-            wS(0,'RIFF'); v.setUint32(4,36+pcm.length,true); wS(8,'WAVEfmt '); v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true); v.setUint32(24,rate,true); v.setUint32(28,rate*2,true); v.setUint16(32,2,true); v.setUint16(34,16,true); wS(36,'data'); v.setUint32(40,pcm.length,true);
-            const b = new Uint8Array(44+pcm.length); b.set(new Uint8Array(h),0); b.set(pcm,44); return new Blob([b],{type:'audio/wav'});
-        }
-        function audioBufferToWavBlob(buffer) {
-            const len = buffer.length * 2 + 44; const buf = new ArrayBuffer(len); const v = new DataView(buf); const ch = buffer.getChannelData(0); let p = 0;
-            const wS = (o, s) => { for(let i=0;i<s.length;i++) v.setUint8(o+i, s.charCodeAt(i)); };
-            wS(0,'RIFF'); v.setUint32(4,len-8,true); wS(8,'WAVEfmt '); v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true); v.setUint32(24,buffer.sampleRate,true); v.setUint32(28,buffer.sampleRate*2,true); v.setUint16(32,2,true); v.setUint16(34,16,true); wS(36,'data'); v.setUint32(40,ch.length*2,true); p=44;
-            for(let i=0;i<ch.length;i++) { let s = Math.max(-1, Math.min(1, ch[i])); s = (s<0 ? s*0x8000 : s*0x7FFF)|0; v.setInt16(p,s,true); p+=2; }
-            return new Blob([v],{type:'audio/wav'});
-        }
-        function playBlob(blob, onEnd) { const u = URL.createObjectURL(blob); const a = document.getElementById('audio-player'); a.src = u; a.play(); a.onended = onEnd; }
-        function downloadBlob(blob, filename) { const u = URL.createObjectURL(blob); const a = document.createElement('a'); a.style.display='none'; a.href=u; a.download=filename; document.body.appendChild(a); a.click(); window.URL.revokeObjectURL(u); }
-        function setLoading(btn, load, txt) { btn.disabled = load; btn.innerHTML = load ? `<div class="loader mr-2"></div> Processing...` : (txt || `<i class="fa-solid fa-play mr-1"></i> Generate & Play`); }
-        function showToast(m) { const t=document.getElementById('toast'); t.textContent=m; t.classList.remove('opacity-0', 'translate-y-5'); setTimeout(()=>t.classList.add('opacity-0', 'translate-y-5'), 3000); }
-        
-        init();
-    </script>
-</body>
-</html>
+            wS(0,'RIFF
 
 
