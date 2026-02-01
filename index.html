@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VocalForge Pro - Lintas Nusa AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; 
+            background-image: radial-gradient(at 50% 0%, #1e293b 0%, #0f172a 70%);
+            color: #f1f5f9;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+
+        select, input, textarea {
+            background-color: rgba(15, 23, 42, 0.6);
+            border: 1px solid #334155;
+            transition: all 0.2s ease;
+        }
+        select:focus, input:focus, textarea:focus {
+            border-color: #38bdf8;
+            background-color: rgba(15, 23, 42, 0.9);
+            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+            outline: none;
+        }
+
+        .tab-btn { position: relative; transition: all 0.3s; }
+        .tab-btn.active { color: #38bdf8; background: rgba(56, 189, 248, 0.05); }
+        .tab-btn::after {
+            content: ''; position: absolute; bottom: 0; left: 50%; width: 0; height: 3px;
+            background: #38bdf8; transition: all 0.3s; transform: translateX(-50%) scaleX(0); border-radius: 3px 3px 0 0;
+        }
+        .tab-btn.active::after { transform: translateX(-50%) scaleX(1); width: 60%; }
+
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%;
+            background: #38bdf8; cursor: pointer; margin-top: -7px; border: 2px solid #fff;
+        }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; background: #334155; border-radius: 2px; }
+
+        .chat-row { display: flex; margin-bottom: 12px; align-items: flex-end; width: 100%; }
+        .chat-row.speaker-a { justify-content: flex-start; }
+        .chat-row.speaker-b { justify-content: flex-end; }
+        .chat-bubble {
+            max-width: 80%; padding: 10px 14px; border-radius: 16px; font-size: 0.9rem; line-height: 1.4; position: relative;
+        }
+        .chat-row.speaker-a .chat-bubble { background: #1e293b; border: 1px solid #334155; color: #e2e8f0; border-bottom-left-radius: 4px; }
+        .chat-row.speaker-b .chat-bubble { background: linear-gradient(135deg, #0284c7, #0ea5e9); border: none; color: white; border-bottom-right-radius: 4px; }
+        
+        .delete-btn {
+            position: absolute; top: -6px; right: -6px; width: 20px; height: 20px;
+            background: #ef4444; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 10px; opacity: 0; transform: scale(0.8); transition: all 0.2s; cursor: pointer; z-index: 10;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3); border: 2px solid #0f172a;
+        }
+        .chat-bubble:hover .delete-btn { opacity: 1; transform: scale(1); }
+        .playing-now { ring: 2px solid #fbbf24; transform: scale(1.02); transition: all 0.3s; }
+
+        .loader { border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid #fff; border-radius: 50%; width: 18px; height: 18px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .bar { width: 6px; height: 12px; background: #38bdf8; border-radius: 4px; transition: height 0.1s; }
+        .animating .bar { animation: bounce 0.6s infinite ease-in-out alternate; }
+        .animating .bar:nth-child(1) { animation-delay: 0.0s; } .animating .bar:nth-child(2) { animation-delay: 0.1s; } .animating .bar:nth-child(3) { animation-delay: 0.2s; } .animating .bar:nth-child(4) { animation-delay: 0.3s; } .animating .bar:nth-child(5) { animation-delay: 0.4s; }
+        @keyframes bounce { 0% { height: 12px; opacity: 0.5; } 100% { height: 32px; opacity: 1; background: #bae6fd; } }
+
+        /* Modal Overlay */
+        .modal {
+            display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+            align-items: center; justify-content: center;
+        }
+        .modal.show { display: flex; animation: fadeIn 0.3s ease; }
+        
+        /* Static Pages */
+        .prose-custom h2 { font-size: 1.5rem; font-weight: 700; color: #38bdf8; margin-bottom: 1rem; margin-top: 1.5rem; }
+        .prose-custom p { margin-bottom: 1rem; color: #cbd5e1; line-height: 1.6; }
+        .prose-custom ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; color: #cbd5e1; }
+        .prose-custom li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col pb-safe">
+
+    <!-- Navbar -->
+    <nav class="border-b border-slate-700/50 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-lg">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('home')">
+                    <img src="1000063032.png" onerror="this.onerror=null; this.src='https://cdn-icons-png.flaticon.com/512/4712/4712009.png';" alt="Logo" class="h-10 w-10 object-cover rounded-full bg-slate-800 border-2 border-slate-700">
+                    <div>
+                        <span class="font-bold text-lg tracking-tight text-white leading-none">VocalForge <span class="text-sky-400">Pro</span></span>
+                        <span class="text-[10px] font-medium text-slate-400 tracking-wide uppercase">Lintas Nusa AI</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="flex-grow flex flex-col">
+        
+        <!-- === MAIN APP (HOME) === -->
+        <main id="main-app" class="flex-grow p-4 md:p-6 max-w-4xl mx-auto w-full space-y-6">
+
+            <!-- API Config -->
+            <div id="ai-config" class="glass-panel p-5 relative overflow-hidden fade-in">
+                <div class="absolute -top-12 -right-12 w-32 h-32 bg-sky-500/10 rounded-full blur-2xl pointer-events-none"></div>
+                <label class="block text-xs font-bold text-sky-100 mb-3 flex items-center gap-2">
+                    <span class="bg-sky-500/20 text-sky-400 p-1.5 rounded-md"><i class="fa-brands fa-google"></i></span> CONFIG API (ANTI-LIMIT)
+                </label>
+                <div class="flex gap-0 rounded-xl border border-slate-600 focus-within:border-sky-500 focus-within:ring-1 focus-within:ring-sky-500 transition-all bg-slate-900/60 overflow-hidden shadow-inner">
+                    <div class="pl-3 pr-2 flex items-center justify-center bg-transparent"><i class="fa-solid fa-key text-slate-500 text-xs"></i></div>
+                    <input type="password" id="api-key" placeholder="Paste Gemini API Key here..." class="flex-grow bg-transparent border-none text-white text-sm px-2 py-3 focus:ring-0 placeholder-slate-500 outline-none w-full font-mono tracking-wide">
+                    <div class="w-px bg-slate-700 my-2"></div>
+                    <a href="https://aistudio.google.com/app/apikey" target="_blank" class="flex items-center px-4 bg-slate-800/50 hover:bg-slate-700 text-sky-400 text-xs font-bold transition-colors whitespace-nowrap">Get Key <i class="fa-solid fa-arrow-up-right-from-square ml-1.5 text-[10px]"></i></a>
+                </div>
+                <p class="text-[9px] text-emerald-500/80 mt-2 flex items-center gap-1.5 ml-1"><i class="fa-solid fa-shield-halved"></i> Key aman & tersimpan lokal di browser.</p>
+            </div>
+
+            <!-- Mode Tabs -->
+            <div class="bg-slate-800/40 p-1 rounded-xl flex border border-slate-700/50">
+                <button onclick="switchTab('monologue')" id="tab-monologue" class="tab-btn active flex-1 py-3 text-sm font-semibold rounded-lg flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-microphone-lines"></i> Monolog
+                </button>
+                <button onclick="switchTab('dialogue')" id="tab-dialogue" class="tab-btn flex-1 py-3 text-sm font-semibold rounded-lg flex items-center justify-center gap-2 text-slate-400 hover:text-slate-300">
+                    <i class="fa-solid fa-comments"></i> Dialog
+                </button>
+            </div>
+
+            <!-- === MODE MONOLOG === -->
+            <div id="monologue-section" class="space-y-5 fade-in">
+                <!-- Engine Switcher -->
+                <div class="glass-panel p-4 flex justify-between items-center pb-0 border-b-0">
+                    <label class="text-xs font-bold text-slate-300 uppercase tracking-wide">Mesin Suara</label>
+                    <div class="flex bg-slate-900 rounded-lg p-1 border border-slate-700">
+                        <button onclick="setEngine('standard')" id="btn-std" class="px-3 py-1.5 rounded-md text-[10px] font-bold text-slate-400 hover:text-white transition-all">HP (Offline)</button>
+                        <button onclick="setEngine('ai')" id="btn-ai" class="px-3 py-1.5 rounded-md text-[10px] font-bold bg-sky-600 text-white shadow-md transition-all">Google AI</button>
+                    </div>
+                </div>
+
+                <!-- Input Script with AI Writer -->
+                <div class="glass-panel p-5 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <label class="text-xs font-bold text-slate-400 uppercase">Naskah</label>
+                        <div class="flex gap-2">
+                            <button onclick="openAiWriter('monologue')" class="text-[10px] font-bold text-purple-300 bg-purple-500/10 px-3 py-1 rounded-lg border border-purple-500/30 hover:bg-purple-500 hover:text-white transition-all flex items-center gap-1">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> AI Writer
+                            </button>
+                            <button onclick="clearText()" class="text-[10px] text-red-400 hover:text-red-300 transition-colors" title="Hapus"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <textarea id="text-input" class="w-full h-32 bg-slate-900/50 text-slate-200 border border-slate-600 rounded-xl p-4 text-sm focus:ring-2 focus:ring-sky-500/50 outline-none resize-none placeholder-slate-600 leading-relaxed" placeholder="Ketik naskah atau gunakan AI Writer..."></textarea>
+                        <div class="absolute bottom-3 right-3 text-[10px] text-slate-500 font-mono"><span id="charCount">0 chars</span></div>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="glass-panel p-5 space-y-5">
+                    <div class="space-y-1.5">
+                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Voice Actor</label>
+                        <div class="flex gap-2">
+                            <div class="relative flex-grow">
+                                <select id="voice-select" class="w-full h-11 pl-3 pr-8 rounded-xl bg-slate-800 border border-slate-600 text-white text-sm appearance-none focus:border-sky-500 cursor-pointer"></select>
+                                <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-slate-400"><i class="fa-solid fa-chevron-down text-xs"></i></div>
+                            </div>
+                            <button id="refresh-voices-btn" onclick="forceReloadVoices()" class="hidden w-11 h-11 bg-slate-800 hover:bg-slate-700 rounded-xl border border-slate-600 text-sky-400 flex-shrink-0 flex items-center justify-center transition-all" title="Refresh"><i class="fa-solid fa-rotate"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- AI Controls -->
+                    <div id="ai-controls" class="space-y-4 pt-2">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="space-y-1.5">
+                                <label class="text-[10px] font-bold text-slate-400 uppercase">Bahasa</label>
+                                <select id="ai-language-select" class="w-full h-10 pl-3 pr-8 rounded-lg bg-slate-800 border border-slate-600 text-white text-xs appearance-none">
+                                    <option value="Indonesian">🇮🇩 Indonesia</option><option value="Javanese">🇮🇩 Jawa</option><option value="Sundanese">🇮🇩 Sunda</option>
+                                    <option value="English">🇺🇸 English</option><option value="Japanese">🇯🇵 Japanese</option><option value="Korean">🇰🇷 Korean</option><option value="Chinese">🇨🇳 Chinese</option>
+                                </select>
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="text-[10px] font-bold text-slate-400 uppercase">Modifikasi</label>
+                                <select id="voice-mod-select" class="w-full h-10 pl-3 pr-8 rounded-lg bg-slate-800 border border-slate-600 text-white text-xs appearance-none">
+                                    <option value="">Normal</option><option value="deep">🔉 Berat</option><option value="high">🔊 Tinggi</option><option value="slow">🐢 Lambat</option><option value="fast">🐇 Cepat</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-1.5">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase">Karakter & Emosi</label>
+                            <div class="relative">
+                                <select id="style-select" class="w-full h-11 pl-3 pr-8 rounded-xl bg-slate-800 border border-slate-600 text-white text-sm appearance-none cursor-pointer">
+                                    <option value="normal">Normal</option>
+                                    <optgroup label="Emosi"><option value="cheerfully">😄 Ceria</option><option value="sadly">😢 Sedih</option><option value="excitedly">🔥 Hype</option><option value="angrily">😡 Marah</option><option value="whisper">🤫 Bisik</option></optgroup>
+                                    <optgroup label="Drama"><option value="melodramatic">🎭 Melodramatis</option><option value="heartbroken">💔 Patah Hati</option><option value="villain">😈 Antagonis</option><option value="inner_monologue">💭 Suara Hati</option></optgroup>
+                                    <optgroup label="Kreator"><option value="podcaster">🎙️ Podcaster</option><option value="streamer">🎮 Streamer</option><option value="reviewer">📱 Reviewer</option><option value="motivator">🌟 Motivator</option><option value="news">📰 Berita</option></optgroup>
+                                    <optgroup label="Fantasi"><option value="demon">🔥 Demon</option><option value="knight">⚔️ Knight</option><option value="princess">👑 Princess</option><option value="monster">👹 Monster</option><option value="ghost">👻 Hantu</option><option value="robot">🤖 Robot</option></optgroup>
+                                    <option value="custom">-- Instruksi Manual (Custom) --</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-slate-400"><i class="fa-solid fa-chevron-down text-xs"></i></div>
+                            </div>
+                        </div>
+
+                        <div id="context-container" class="space-y-1.5">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase">Konteks</label>
+                            <div class="relative">
+                                <select id="context-select" class="w-full h-11 pl-3 pr-8 rounded-xl bg-slate-800 border border-slate-600 text-white text-sm appearance-none cursor-pointer">
+                                    <option value="">-- Tidak Ada --</option>
+                                    <optgroup label="Konten"><option value="intro">👋 Intro Video</option><option value="outro">🙏 Outro Video</option><option value="unboxing">📦 Unboxing</option><option value="tutorial">📚 Tutorial</option><option value="promo">⚡ Promo</option><option value="creepypasta">👻 Horor</option></optgroup>
+                                    <optgroup label="Drama"><option value="soap_opera">📺 Sinetron</option><option value="breakup">💔 Putus</option><option value="dying">💀 Sekarat</option><option value="battle_shout">⚔️ Perang</option><option value="prank">🤡 Prank</option></optgroup>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-slate-400"><i class="fa-solid fa-chevron-down text-xs"></i></div>
+                            </div>
+                        </div>
+
+                        <div id="custom-prompt-container" class="hidden">
+                            <input type="text" id="custom-prompt-input" placeholder="e.g. Speak like a wise old man..." class="w-full h-10 rounded-lg bg-slate-900 border border-purple-500/50 text-white text-sm px-3 outline-none focus:border-purple-500">
+                        </div>
+                        
+                        <div class="text-right"><button onclick="toggleDebug()" class="text-[10px] text-slate-500 hover:text-white underline">Lihat Prompt Asli</button></div>
+                        <div id="debug-container" class="hidden mt-2 p-3 bg-black/40 rounded-lg border border-slate-700">
+                            <textarea id="debug-prompt" readonly class="w-full h-16 bg-transparent text-[10px] text-green-400 font-mono resize-none outline-none"></textarea>
+                        </div>
+                    </div>
+
+                    <div id="standard-controls" class="hidden grid grid-cols-2 gap-4 pt-2">
+                        <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-700">
+                            <div class="flex justify-between mb-2"><label class="text-[10px] font-bold text-slate-400 uppercase">Kecepatan</label><span id="rate-val" class="text-[10px] text-sky-400 font-mono">1.0</span></div>
+                            <input type="range" id="rate" min="0.5" max="2" value="1" step="0.1" class="range-slider" oninput="document.getElementById('rate-val').innerText = this.value">
+                        </div>
+                        <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-700">
+                            <div class="flex justify-between mb-2"><label class="text-[10px] font-bold text-slate-400 uppercase">Nada</label><span id="pitch-val" class="text-[10px] text-sky-400 font-mono">1.0</span></div>
+                            <input type="range" id="pitch" min="0" max="2" value="1" step="0.1" class="range-slider" oninput="document.getElementById('pitch-val').innerText = this.value">
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button id="speak-btn" class="flex-grow bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white font-bold py-3.5 px-6 rounded-xl shadow-lg shadow-sky-900/40 transition-all active:scale-[0.98] flex justify-center items-center gap-2 group">
+                            <i class="fa-solid fa-play group-hover:scale-110 transition-transform"></i> Generate & Play
+                        </button>
+                        <button onclick="downloadLastAudio()" id="btn-download-mono" class="w-14 bg-emerald-700/80 text-emerald-100 rounded-xl hover:bg-emerald-600 border border-emerald-600/30 transition-all flex items-center justify-center hidden" title="Download Audio">
+                            <i class="fa-solid fa-download text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="history-container" class="hidden mt-4">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase mb-3 flex items-center gap-2 ml-1"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat & Download</h3>
+                    <div id="history-list" class="space-y-2"></div>
+                </div>
+            </div>
+
+            <!-- === MODE DIALOG === -->
+            <div id="dialogue-section" class="hidden space-y-5 fade-in">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-slate-800/40 p-3 rounded-xl border border-slate-700/50 border-l-4 border-l-slate-500">
+                        <div class="text-xs font-bold text-slate-300 mb-2 flex items-center gap-2"><i class="fa-solid fa-user-circle"></i> Speaker A</div>
+                        <select id="voice-a" class="w-full bg-slate-900/80 border-0 text-xs text-white p-2 rounded-lg mb-1.5 focus:ring-1 focus:ring-slate-500"></select>
+                        <select id="style-a" class="w-full bg-slate-900/80 border-0 text-xs text-slate-300 p-2 rounded-lg focus:ring-1 focus:ring-slate-500"></select>
+                    </div>
+                    <div class="bg-slate-800/40 p-3 rounded-xl border border-slate-700/50 border-r-4 border-r-sky-500 text-right">
+                        <div class="text-xs font-bold text-sky-400 mb-2 flex items-center justify-end gap-2">Speaker B <i class="fa-solid fa-user-circle"></i></div>
+                        <select id="voice-b" class="w-full bg-slate-900/80 border-0 text-xs text-white p-2 rounded-lg mb-1.5 focus:ring-1 focus:ring-sky-500" dir="rtl"></select>
+                        <select id="style-b" class="w-full bg-slate-900/80 border-0 text-xs text-slate-300 p-2 rounded-lg focus:ring-1 focus:ring-sky-500" dir="rtl"></select>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-0 overflow-hidden flex flex-col min-h-[400px] relative">
+                    <div id="chat-container" class="flex-grow p-4 space-y-3 overflow-y-auto max-h-[400px] scroll-smooth bg-slate-900/30">
+                        <div class="flex flex-col items-center justify-center h-full text-slate-500 opacity-60 mt-8">
+                            <i class="fa-regular fa-comments text-3xl mb-2"></i><span class="text-xs">Belum ada percakapan</span>
+                        </div>
+                    </div>
+                    
+                    <div class="border-t border-slate-700 p-4 bg-slate-800/90 backdrop-blur-md z-10">
+                        
+                        <div class="flex justify-end mb-2">
+                            <button onclick="openAiWriter('dialogue')" class="text-[9px] font-bold bg-purple-600/20 text-purple-400 border border-purple-500/30 px-2 py-0.5 rounded hover:bg-purple-600 hover:text-white transition-all flex items-center gap-1">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> AI Script Generator
+                            </button>
+                        </div>
+
+                        <form onsubmit="event.preventDefault(); addLine();" class="flex items-center gap-2 mb-2">
+                            <div class="relative shrink-0">
+                                <select id="speaker-select" class="h-11 pl-3 pr-8 bg-slate-700 text-white text-xs font-bold rounded-xl border border-slate-600 focus:border-sky-500 outline-none appearance-none transition-all cursor-pointer hover:bg-slate-600">
+                                    <option value="A">Spk A</option><option value="B">Spk B</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-2.5 flex items-center pointer-events-none text-slate-400"><i class="fa-solid fa-caret-down text-[10px]"></i></div>
+                            </div>
+                            <div class="flex-grow relative h-11">
+                                <input type="text" id="line-input" enterkeyhint="send"
+                                    class="w-full h-full bg-slate-900 text-white text-sm rounded-xl pl-4 pr-11 border border-slate-600 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 outline-none transition-all placeholder-slate-500 shadow-inner" 
+                                    placeholder="Ketik dialog..." autocomplete="off">
+                                <button type="submit" class="absolute right-1.5 top-1.5 bottom-1.5 w-8 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg flex items-center justify-center shadow-sm transition-all active:scale-95" title="Kirim"><i class="fa-solid fa-paper-plane text-xs"></i></button>
+                            </div>
+                        </form>
+                        
+                        <div class="flex justify-between items-center px-1 mb-3">
+                            <p class="text-[9px] text-slate-500 flex items-center gap-1.5 opacity-80 bg-slate-900/50 px-2 py-0.5 rounded border border-slate-700/50"><span class="font-bold text-sky-400">Enter ↵</span> untuk kirim</p>
+                        </div>
+
+                        <div class="flex gap-2 pt-3 border-t border-slate-700/50">
+                            <button onclick="playDialogue()" id="btn-dialog-play" class="flex-grow bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white font-bold py-2.5 rounded-lg shadow-md transition-all active:scale-[0.98] text-xs flex justify-center items-center gap-2">
+                                <i class="fa-solid fa-film"></i> Generate Scene
+                            </button>
+                            <button onclick="exportDialogue()" id="btn-dialog-download" class="w-12 bg-emerald-700/80 text-emerald-100 rounded-xl hover:bg-emerald-600 border border-emerald-600/30 transition-all flex items-center justify-center hidden" title="Download WAV"><i class="fa-solid fa-download"></i></button>
+                            <button onclick="clearChat()" class="w-12 bg-slate-700/50 text-slate-400 rounded-xl hover:bg-red-900/40 hover:text-red-400 border border-slate-600/50 hover:border-red-500/30 transition-all flex items-center justify-center" title="Hapus Chat"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-center h-10 gap-1.5 items-end opacity-50 transition-opacity duration-300 mt-2" id="visualizer">
+                <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+            </div>
+            <audio id="audio-player" class="w-full hidden" controls></audio>
+            <div id="status-bar" class="fixed bottom-0 left-0 w-full bg-slate-900/90 border-t border-slate-700 p-2 text-center text-[10px] text-sky-400 font-mono hidden backdrop-blur-sm z-50">Ready</div>
+        </main>
+
+        <!-- === STATIC PAGES (SPA) === -->
+        <div id="static-pages" class="hidden flex-grow p-4 md:p-6 max-w-4xl mx-auto w-full space-y-6">
+            
+            <div id="privacy-content" class="static-content hidden glass-panel p-6">
+                <h2 class="text-2xl font-bold text-sky-400 mb-4">Kebijakan Privasi</h2>
+                <div class="prose-custom text-sm text-slate-300">
+                    <p>Terakhir diperbarui: Februari 2026</p>
+                    <p>VocalForge Pro ("Aplikasi") dikembangkan oleh Lintas Nusa AI. Kami menghargai privasi Anda.</p>
+                    <h3>1. Data API Key</h3>
+                    <p>Kami tidak menyimpan API Key Anda di server kami. Kunci API disimpan secara lokal di browser perangkat Anda menggunakan <code>localStorage</code>. Anda memegang kendali penuh atas kunci Anda.</p>
+                    <h3>2. Data Suara & Teks</h3>
+                    <p>Naskah yang Anda masukkan dikirim langsung ke Google Gemini API untuk diproses. Kami tidak menyimpan naskah atau audio Anda di server kami.</p>
+                </div>
+                <button onclick="navigateTo('home')" class="mt-6 px-4 py-2 bg-slate-700 rounded-lg text-white text-xs hover:bg-slate-600">Kembali</button>
+            </div>
+
+            <div id="about-content" class="static-content hidden glass-panel p-6">
+                <h2 class="text-2xl font-bold text-sky-400 mb-4">Tentang Kami</h2>
+                <div class="prose-custom text-sm text-slate-300">
+                    <p><b>VocalForge Pro</b> adalah alat bantu voiceover berbasis AI yang dirancang untuk konten kreator Indonesia.</p>
+                    <p>Dikembangkan oleh <b>Lintas Nusa AI</b>, kami bertujuan mendemokratisasi akses teknologi AI berkualitas tinggi agar dapat digunakan oleh siapa saja, mulai dari YouTuber pemula hingga profesional.</p>
+                    <p>Versi: 2.0 (Stable)</p>
+                </div>
+                <button onclick="navigateTo('home')" class="mt-6 px-4 py-2 bg-slate-700 rounded-lg text-white text-xs hover:bg-slate-600">Kembali</button>
+            </div>
+
+            <div id="contact-content" class="static-content hidden glass-panel p-6">
+                <h2 class="text-2xl font-bold text-sky-400 mb-4">Hubungi Kami</h2>
+                <div class="prose-custom text-sm text-slate-300">
+                    <p>Punya pertanyaan, saran fitur, atau laporan bug?</p>
+                    <ul class="mt-4 space-y-2">
+                        <li>📧 Email: support@lintasnusa.ai (Contoh)</li>
+                        <li>🌐 Website: lintasnusa.ai</li>
+                    </ul>
+                </div>
+                <button onclick="navigateTo('home')" class="mt-6 px-4 py-2 bg-slate-700 rounded-lg text-white text-xs hover:bg-slate-600">Kembali</button>
+            </div>
+
+        </div>
+
+        <!-- Info Panel & Footer -->
+        <div class="glass-panel p-4 border-t-4 border-slate-600 space-y-4">
+            <div class="grid grid-cols-5 gap-4">
+                <div class="col-span-2 bg-slate-800/80 p-3 rounded-lg border border-slate-700/50 flex flex-col items-center justify-center text-center">
+                    <h4 class="text-[10px] font-bold text-yellow-400 uppercase mb-2 flex items-center gap-1">
+                        <i class="fa-solid fa-mug-hot"></i> Traktir Kopi
+                    </h4>
+                    <div class="bg-white p-1 rounded-lg mb-1 shadow-lg">
+                        <img src="IMG-20260130-WA0023.jpg" 
+                             onerror="this.onerror=null; this.src='https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=SupportMe';" 
+                             alt="QRIS Support" class="w-20 h-20 object-contain">
+                    </div>
+                    <p class="text-[8px] text-slate-400 mt-1">Dukung pengembangan tools ini.</p>
+                </div>
+                <div class="col-span-3 bg-slate-800/50 p-3 rounded-lg border border-slate-700/50 flex flex-col justify-center">
+                    <h4 class="text-[10px] font-bold text-sky-400 uppercase mb-2"><i class="fa-solid fa-gauge"></i> Limit Gratis</h4>
+                    <ul class="text-[9px] text-slate-400 space-y-2">
+                        <li class="flex justify-between border-b border-slate-700/50 pb-1">
+                            <span>⚡ Kecepatan:</span> <span class="font-mono text-emerald-400">~15x / menit</span>
+                        </li>
+                        <li class="flex justify-between border-b border-slate-700/50 pb-1">
+                            <span>📅 Harian:</span> <span class="font-mono text-emerald-400">~1.500x / hari</span>
+                        </li>
+                        <li class="text-slate-500 italic pt-1">Reset tiap pukul 14.00 WIB.</li>
+                    </ul>
+               </div>
+            </div>
+        </div>
+
+        <footer class="border-t border-slate-700/50 bg-slate-900/50 mt-6 py-6">
+            <div class="max-w-4xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center text-[10px] text-slate-500 gap-4">
+                <div>&copy; 2026 Lintas Nusa AI. All rights reserved.</div>
+                <div class="flex gap-6 font-medium">
+                    <button onclick="navigateTo('privacy')" class="hover:text-sky-400 transition-colors">Privacy Policy</button>
+                    <button onclick="navigateTo('about')" class="hover:text-sky-400 transition-colors">About</button>
+                    <button onclick="navigateTo('contact')" class="hover:text-sky-400 transition-colors">Contact</button>
+                </div>
+            </div>
+        </footer>
+
+    <!-- AI WRITER MODAL -->
+    <div id="ai-writer-modal" class="modal">
+        <div class="glass-panel p-6 max-w-sm w-full mx-4 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-robot text-purple-400"></i> AI Script Writer</h3>
+            <p class="text-xs text-slate-400">Pilih jenis naskah (Bahasa Indonesia otomatis):</p>
+            <div class="grid grid-cols-3 gap-2">
+                <button onclick="setAiType('Intro')" class="ai-type-btn bg-slate-800 border border-slate-600 text-slate-300 text-xs py-2 rounded hover:bg-purple-900/50 hover:border-purple-500 hover:text-white transition-all active:scale-95">Intro</button>
+                <button onclick="setAiType('Outro')" class="ai-type-btn bg-slate-800 border border-slate-600 text-slate-300 text-xs py-2 rounded hover:bg-purple-900/50 hover:border-purple-500 hover:text-white transition-all active:scale-95">Outro</button>
+                <button onclick="setAiType('General')" class="ai-type-btn bg-purple-600/20 border border-purple-500 text-white text-xs py-2 rounded hover:bg-purple-600 transition-all active:scale-95">Bebas</button>
+            </div>
+            <textarea id="ai-topic-input" class="w-full h-24 bg-slate-900 border border-slate-600 rounded-xl p-3 text-sm text-white placeholder-slate-600 focus:ring-2 focus:ring-purple-500 outline-none transition-all" placeholder="Contoh: Podcast horor malam jumat tentang rumah tua..."></textarea>
+            <div class="flex gap-2">
+                <button onclick="closeAiWriter()" class="flex-1 bg-slate-700 text-slate-300 py-2 rounded-lg text-sm hover:bg-slate-600">Batal</button>
+                <button onclick="generateScript()" id="btn-generate-script" class="flex-1 bg-purple-600 text-white py-2 rounded-lg text-sm hover:bg-purple-500 font-bold shadow-lg shadow-purple-900/50">Buat Naskah</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="fixed top-20 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white px-5 py-3 rounded-full shadow-2xl border border-slate-600 text-xs font-medium opacity-0 pointer-events-none transition-all duration-300 z-50 whitespace-nowrap translate-y-5">Msg</div>
+
+    <script>
+        const aiVoices = [ { name: "Kore", gender: "Female", desc: "Calm/Standard" }, { name: "Fenrir", gender: "Male", desc: "Deep/Berat" }, { name: "Puck", gender: "Male", desc: "Energetic/Ceria" }, { name: "Zephyr", gender: "Female", desc: "Professional/News" }, { name: "Aoede", gender: "Female", desc: "Elegant/Anggun" }, { name: "Charon", gender: "Male", desc: "Gravelly/Serak" } ];
+        const styleMap = { "normal": "Speak naturally.", "cheerfully": "in a very happy voice", "sadly": "in a sad voice", "excitedly": "in an excited high-energy voice", "angrily": "in an angry voice", "scared": "in a scared trembling voice", "whisper": "in a soft whisper", "melodramatic": "in an exaggerated dramatic soap-opera style", "heartbroken": "in a broken sobbing voice", "villain": "in a sinister villain voice", "inner_monologue": "in a soft echoey thought voice", "comedian": "like a stand-up comedian", "laughing": "while suppressing laughter", "goofy": "in a silly goofy voice", "sarcastic": "in a sarcastic tone", "podcaster": "in a friendly podcast tone", "streamer": "in a loud hype streamer voice", "news": "in a formal news anchor voice", "demon": "in a deep terrifying demon voice", "knight": "in a brave noble voice", "princess": "in a soft elegant princess voice", "wizard": "in a raspy old wizard voice", "monster": "in a growling monster voice", "ghost": "in a spooky ghost voice", "robot": "in a flat robotic voice", "custom": "custom" };
+        const modMap = { "deep": "Make voice deeper.", "high": "Make voice higher pitched.", "slow": "Speak slowly.", "fast": "Speak quickly." };
+        const contextMap = { "intro": "Context: Intro video.", "outro": "Context: Outro video.", "unboxing": "Context: Unboxing.", "tutorial": "Context: Tutorial.", "promo": "Context: Commercial.", "vlog": "Context: Vlog.", "creepypasta": "Context: Scary story.", "soap_opera": "Context: TV Drama.", "breakup": "Context: Breakup.", "confession": "Context: Secret.", "flashback": "Context: Memory.", "dying": "Context: Dying.", "prank": "Context: Prank.", "standup": "Context: Comedy.", "fail": "Context: Fail moment.", "battle_shout": "Context: War cry.", "victory": "Context: Victory." };
+
+        let mode = 'ai'; let dialogueLines = []; let standardVoices = []; let voiceHistory = []; let loadInterval;
+        let selectedAiType = 'General'; let lastMonoBlob = null;
+        const synth = window.speechSynthesis;
+
+        const els = {
+            textInput: document.getElementById('text-input'), voiceSelect: document.getElementById('voice-select'), aiConfig: document.getElementById('ai-config'), aiControls: document.getElementById('ai-controls'),
+            stdControls: document.getElementById('standard-controls'), voiceDesc: document.getElementById('voice-desc'), refreshBtn: document.getElementById('refresh-voices-btn'), styleSelect: document.getElementById('style-select'),
+            contextSelect: document.getElementById('context-select'), modSelect: document.getElementById('voice-mod-select'), langSelect: document.getElementById('ai-language-select'), customPromptContainer: document.getElementById('custom-prompt-container'),
+            customPromptInput: document.getElementById('custom-prompt-input'), debugContainer: document.getElementById('debug-container'), debugPrompt: document.getElementById('debug-prompt'), visualizer: document.getElementById('visualizer'),
+            audioPlayer: document.getElementById('audio-player'), statusBar: document.getElementById('status-bar'), historyContainer: document.getElementById('history-container'), historyList: document.getElementById('history-list'), 
+            btnDialogDownload: document.getElementById('btn-dialog-download'), aiModal: document.getElementById('ai-writer-modal'), aiTopic: document.getElementById('ai-topic-input'), btnGenScript: document.getElementById('btn-generate-script'),
+            btnMonoDownload: document.getElementById('btn-download-mono'),
+            mainApp: document.getElementById('main-app'), staticPages: document.getElementById('static-pages'), staticContents: document.querySelectorAll('.static-content')
+        };
+
+        function init() {
+            const populate = (id, data, isVoice) => {
+                const el = document.getElementById(id); el.innerHTML = "";
+                data.forEach(d => { const opt = document.createElement("option"); if(isVoice) { opt.value = d.name; opt.text = `${d.name} (${d.desc})`; } else { opt.value = d[0]; opt.text = d[1]; } el.add(opt); });
+            };
+            populate("voice-a", aiVoices, true); populate("voice-b", aiVoices, true); document.getElementById("voice-b").selectedIndex = 1;
+            
+            els.voiceSelect.innerHTML = '';
+            aiVoices.forEach(v => { const opt = document.createElement("option"); opt.value = v.name; opt.text = `✨ ${v.name} (${v.desc})`; els.voiceSelect.add(opt); });
+            
+            const simpleStyles = Object.keys(styleMap).filter(k => k !== 'custom').map(k => [k, k.charAt(0).toUpperCase() + k.slice(1).replace('_', ' ')]);
+            simpleStyles.push(['custom', '-- Manual (Custom) --']);
+            populate("style-a", simpleStyles, false);
+            populate("style-b", simpleStyles, false);
+
+            updateVoiceDesc();
+        }
+        
+        // --- NAVIGATION ---
+        window.navigateTo = (pageId) => {
+            if(pageId === 'home') {
+                els.mainApp.classList.remove('hidden');
+                els.staticPages.classList.add('hidden');
+            } else {
+                els.mainApp.classList.add('hidden');
+                els.staticPages.classList.remove('hidden');
+                els.staticContents.forEach(el => el.classList.add('hidden'));
+                document.getElementById(pageId + '-content').classList.remove('hidden');
+            }
+            window.scrollTo(0,0);
+        };
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active', 'text-sky-400', 'bg-sky-500/10'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.add('text-slate-400'));
+            document.getElementById(`tab-${tab}`).classList.add('active', 'text-sky-400', 'bg-sky-500/10');
+            document.getElementById('monologue-section').classList.toggle('hidden', tab !== 'monologue');
+            document.getElementById('dialogue-section').classList.toggle('hidden', tab !== 'dialogue');
+        }
+        
+        window.setEngine = (newMode) => { 
+            mode = newMode;
+            if(mode === 'standard') {
+                els.aiConfig.classList.add('hidden'); els.voiceDesc.classList.add('hidden'); els.aiControls.classList.add('hidden'); els.stdControls.classList.remove('hidden'); els.refreshBtn.classList.remove('hidden'); els.btnMonoDownload.classList.add('hidden');
+                if(standardVoices.length === 0) forceReloadVoices();
+            } else {
+                els.aiConfig.classList.remove('hidden'); els.voiceDesc.classList.remove('hidden'); els.aiControls.classList.remove('hidden'); els.stdControls.classList.add('hidden'); els.refreshBtn.classList.add('hidden');
+                if(lastMonoBlob) els.btnMonoDownload.classList.remove('hidden');
+            }
+        };
+
+        function updateVoiceDesc() { const val = els.voiceSelect.value; const v = aiVoices.find(x => x.name === val); if(v) els.voiceDesc.textContent = `Style: ${v.desc}`; }
+        
+        // AI WRITER
+        window.openAiWriter = (source) => { els.aiModal.classList.add('show'); els.aiModal.dataset.source = source || 'monologue'; };
+        window.closeAiWriter = () => els.aiModal.classList.remove('show');
+        window.setAiType = (type) => {
+            selectedAiType = type;
+            document.querySelectorAll('.ai-type-btn').forEach(b => {
+                b.classList.remove('bg-purple-600/20', 'border-purple-500', 'text-white');
+                b.classList.add('bg-slate-800', 'border-slate-600', 'text-slate-300');
+                if(b.textContent === type) { 
+                   b.classList.remove('bg-slate-800', 'border-slate-600', 'text-slate-300');
+                   b.classList.add('bg-purple-600/20', 'border-purple-500', 'text-white');
+                }
+            });
+        };
+        
+        function cleanScriptOutput(text) {
+            let cleaned = text.replace(/[\(\[\*].*?[\)\]\*]/g, ''); 
+            cleaned = cleaned.replace(/^(Naskah|Script|Intro|Outro):/i, '');
+            return cleaned.trim();
+        }
+
+        window.generateScript = async () => {
+            const topic = els.aiTopic.value.trim();
+            const apiKey = document.getElementById('api-key').value.trim();
+            if(!topic) return showToast("Isi topik dulu!");
+            if(!apiKey) return showToast("API Key wajib diisi!");
+            els.btnGenScript.innerHTML = '<div class="loader"></div>';
+            els.btnGenScript.disabled = true;
+
+            let systemInstruction = "";
+            if (selectedAiType === 'Intro') {
+                systemInstruction = "Write a catchy, engaging INTRO script in INDONESIAN language. Keep it under 300 characters. Output ONLY the spoken words. Do NOT include scene descriptions or emotions in brackets.";
+            } else if (selectedAiType === 'Outro') {
+                systemInstruction = "Write a warm, memorable OUTRO script in INDONESIAN language. Keep it under 300 characters. Output ONLY the spoken words. Do NOT include scene descriptions or emotions in brackets.";
+            } else {
+                systemInstruction = "Write a creative short script in INDONESIAN language based on the topic. Keep it under 300 characters. Output ONLY the spoken words. Do NOT include scene descriptions or emotions in brackets.";
+            }
+
+            const prompt = `${systemInstruction} Topic: ${topic}`;
+
+            try {
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                const fetchWithRetry = async (retries = 3) => {
+                    const r = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
+                    if (r.status === 429 && retries > 0) {
+                        showToast(`Limit AI Writer. Menunggu 5s... (${retries})`);
+                        await new Promise(res => setTimeout(res, 5000));
+                        return fetchWithRetry(retries - 1);
+                    }
+                    return r;
+                };
+                const resp = await fetchWithRetry();
+                if(!resp.ok) throw new Error("Gagal membuat naskah");
+                const data = await resp.json();
+                let text = data.candidates[0].content.parts[0].text;
+                text = cleanScriptOutput(text);
+
+                if(els.aiModal.dataset.source === 'dialogue') {
+                    document.getElementById('line-input').value = text;
+                } else {
+                    els.textInput.value = text;
+                }
+                closeAiWriter();
+                showToast("Naskah sukses dibuat & dibersihkan!");
+            } catch(e) {
+                showToast("Error: " + e.message);
+            } finally {
+                els.btnGenScript.innerHTML = 'Buat Naskah';
+                els.btnGenScript.disabled = false;
+            }
+        };
+
+        document.getElementById('speak-btn').onclick = async () => {
+            const text = els.textInput.value.trim(); if (!text) return showToast("Masukkan teks dulu!"); setLoading(document.getElementById('speak-btn'), true);
+            if (mode === 'standard') { playStandard(text); } else {
+                try { 
+                    const blob = await playAI(text); 
+                    if(blob) {
+                        lastMonoBlob = blob; els.btnMonoDownload.classList.remove('hidden');
+                        addToHistory(text, els.voiceSelect.value, els.styleSelect.value, blob);
+                    }
+                } catch(e) { console.error(e); } finally { setLoading(document.getElementById('speak-btn'), false); }
+            }
+        };
+
+        window.downloadLastAudio = () => {
+            if(!lastMonoBlob) return showToast("Belum ada audio untuk di-download!");
+            downloadBlob(lastMonoBlob, `monologue_${Date.now()}.wav`);
+        };
+
+        async function playAI(text, specificVoice, specificStyle, retryCount = 0) {
+            const apiKey = document.getElementById('api-key').value.trim(); if(!apiKey) { return showToast("⚠️ Masukkan API Key!"); }
+            const vName = specificVoice || els.voiceSelect.value; 
+            const sKey = specificStyle || els.styleSelect.value;
+            const lang = els.langSelect.value;
+            
+            let instruction = "";
+            if(sKey === 'custom' && !specificStyle) { instruction = els.customPromptInput.value; } else {
+                const baseStyle = styleMap[sKey] || "Speak naturally.";
+                const contextStr = (!specificStyle && els.contextSelect.value) ? (contextMap[els.contextSelect.value] || "") : "";
+                const modStr = (!specificStyle && els.modSelect.value) ? (modMap[els.modSelect.value] || "") : "";
+                instruction = `Speak in ${lang}. ${baseStyle} ${modStr} ${contextStr}`;
+            }
+            const prompt = `${instruction} Content: "${text}"`;
+
+            try {
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+                const resp = await fetch(url, {
+                    method: "POST", headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: vName } } } } })
+                });
+
+                if (resp.status === 429) {
+                    if (retryCount < 3) {
+                        updateStatus(`Limit Hit. Menunggu 10s... (Percobaan ${retryCount+1}/3)`);
+                        await new Promise(r => setTimeout(r, 10000)); 
+                        return playAI(text, specificVoice, specificStyle, retryCount + 1); 
+                    } else { throw new Error("Limit Harian Habis. Coba lagi besok."); }
+                }
+
+                if (!resp.ok) throw new Error((await resp.json()).error?.message || "API Error");
+                const data = await resp.json();
+                const audioBlob = base64ToBlob(data.candidates[0].content.parts[0].inlineData.data);
+                
+                if(!specificVoice) playBlob(audioBlob);
+                return audioBlob;
+            } catch (e) {
+                showToast(e.message); throw e;
+            }
+        }
+        
+        function playStandard(text) {
+            if (synth.speaking) synth.cancel();
+            const utter = new SpeechSynthesisUtterance(text);
+            if(els.voiceSelect.value.includes("Tidak ada")) { setLoading(document.getElementById('speak-btn'), false); return showToast("HP belum memuat suara."); }
+            const v = standardVoices.find(x => x.name === els.voiceSelect.value);
+            if(v) utter.voice = v;
+            utter.pitch = document.getElementById('pitch').value; utter.rate = document.getElementById('rate').value;
+            utter.onstart = () => { els.visualizer.classList.add('animating'); };
+            utter.onend = () => { setLoading(document.getElementById('speak-btn'), false); els.visualizer.classList.remove('animating'); };
+            utter.lang = 'id-ID'; synth.speak(utter);
+            els.btnMonoDownload.classList.add('hidden'); lastMonoBlob = null;
+        }
+
+        function renderChat() {
+            const container = document.getElementById('chat-container');
+            container.innerHTML = dialogueLines.length === 0 ? '<div class="flex flex-col items-center justify-center h-full text-slate-500 opacity-60 mt-8"><i class="fa-regular fa-comments text-3xl mb-2"></i><span class="text-xs">Belum ada percakapan</span></div>' : '';
+            dialogueLines.forEach((line, index) => {
+                const div = document.createElement('div'); div.className = `chat-row speaker-${line.speaker.toLowerCase()}`; div.id = `chat-line-${index}`;
+                div.innerHTML = `<div class="chat-bubble shadow-md group relative"><button onclick="deleteLine(${index})" class="delete-btn"><i class="fa-solid fa-times"></i></button><strong class="block text-[10px] opacity-70 mb-1">${line.speaker==='A'?'Speaker A':'Speaker B'}</strong>${line.text}</div>`; container.appendChild(div);
+            });
+            container.scrollTop = container.scrollHeight;
+            if(dialogueLines.some(l => l.audio)) els.btnDialogDownload.classList.remove('hidden'); else els.btnDialogDownload.classList.add('hidden');
+        }
+
+        window.addLine = () => { const s = document.getElementById('speaker-select').value; const t = document.getElementById('line-input').value.trim(); if(!t) return; dialogueLines.push({ speaker: s, text: t, audio: null }); renderChat(); document.getElementById('line-input').value = ''; };
+        window.deleteLine = (index) => { dialogueLines.splice(index, 1); renderChat(); };
+        window.clearChat = () => { dialogueLines = []; renderChat(); };
+
+        window.playDialogue = async () => {
+            if(dialogueLines.length === 0) return showToast("Isi dialog dulu!");
+            const btn = document.getElementById('btn-dialog-play'); setLoading(btn, true, "Generating Scene..."); els.statusBar.classList.remove('hidden');
+            try {
+                let queue = [];
+                for(let i=0; i<dialogueLines.length; i++) {
+                    const line = dialogueLines[i];
+                    if(i>0) { for(let d=5; d>0; d--) { updateStatus(`Safety Cooldown: ${d}s...`); await new Promise(r => setTimeout(r, 1000)); } }
+                    const v = document.getElementById(line.speaker === 'A' ? 'voice-a' : 'voice-b').value;
+                    if (line.audio) { updateStatus(`Using Cache line ${i+1}...`); queue.push(line.audio); } 
+                    else { updateStatus(`Generating line ${i+1}/${dialogueLines.length}...`); const blob = await playAI(line.text, v, 'normal'); line.audio = blob; queue.push(blob); }
+                }
+                updateStatus("Playing Scene...");
+                for(let i=0; i<queue.length; i++) {
+                    const bubbles = document.querySelectorAll('.chat-bubble'); bubbles.forEach(b => b.classList.remove('playing-now'));
+                    if(document.getElementById(`chat-line-${i}`)) { const active = document.getElementById(`chat-line-${i}`).querySelector('.chat-bubble'); active.classList.add('playing-now'); active.scrollIntoView({ behavior: "smooth", block: "center" }); }
+                    await new Promise(resolve => playBlob(queue[i], resolve));
+                }
+                document.querySelectorAll('.chat-bubble').forEach(b => b.classList.remove('playing-now'));
+            } catch(e) { showToast(e.message); } finally { setLoading(btn, false, '<i class="fa-solid fa-film"></i> Generate & Play Scene'); els.statusBar.classList.add('hidden'); }
+        }
+        
+        window.exportDialogue = async () => {
+             if(!dialogueLines.some(l => l.audio)) return showToast("Play scene dulu!");
+             updateStatus("Merging Audio...");
+             try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)(); const buffers = [];
+                for(const line of dialogueLines) { if(!line.audio) continue; const ab = await line.audio.arrayBuffer(); const b = await audioCtx.decodeAudioData(ab); buffers.push(b); }
+                const totalLen = buffers.reduce((acc, b) => acc + b.length, 0); const out = audioCtx.createBuffer(1, totalLen, buffers[0].sampleRate);
+                const data = out.getChannelData(0); let off = 0;
+                for(const buff of buffers) { data.set(buff.getChannelData(0), off); off += buff.length; }
+                downloadBlob(audioBufferToWavBlob(out), "dialogue_scene.wav"); showToast("Download Started!");
+            } catch(e) { console.error(e); showToast("Gagal Export"); } finally { els.statusBar.classList.add('hidden'); }
+        };
+
+        function base64ToBlob(b64) { const bin = atob(b64); const len = bin.length; const bytes = new Uint8Array(len); for (let i = 0; i < len; i++) bytes[i] = bin.charCodeAt(i); return pcmToWav(bytes, 24000); }
+        function pcmToWav(pcm, rate) {
+            const h = new ArrayBuffer(44); const v = new DataView(h); const wS = (o, s) => { for(let i=0;i<s.length;i++) v.setUint8(o+i, s.charCodeAt(i)); };
+            wS(0,'RIFF'); v.setUint32(4,36+pcm.length,true); wS(8,'WAVEfmt '); v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true); v.setUint32(24,rate,true); v.setUint32(28,rate*2,true); v.setUint16(32,2,true); v.setUint16(34,16,true); wS(36,'data'); v.setUint32(40,pcm.length,true);
+            const b = new Uint8Array(44+pcm.length); b.set(new Uint8Array(h),0); b.set(pcm,44); return new Blob([b],{type:'audio/wav'});
+        }
+        function audioBufferToWavBlob(buffer) {
+            const len = buffer.length * 2 + 44; const buf = new ArrayBuffer(len); const v = new DataView(buf); const ch = buffer.getChannelData(0); let p = 0;
+            const wS = (o, s) => { for(let i=0;i<s.length;i++) v.setUint8(o+i, s.charCodeAt(i)); };
+            wS(0,'RIFF'); v.setUint32(4,len-8,true); wS(8,'WAVEfmt '); v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true); v.setUint32(24,buffer.sampleRate,true); v.setUint32(28,buffer.sampleRate*2,true); v.setUint16(32,2,true); v.setUint16(34,16,true); wS(36,'data'); v.setUint32(40,ch.length*2,true); p=44;
+            for(let i=0;i<ch.length;i++) { let s = Math.max(-1, Math.min(1, ch[i])); s = (s<0 ? s*0x8000 : s*0x7FFF)|0; v.setInt16(p,s,true); p+=2; }
+            return new Blob([v],{type:'audio/wav'});
+        }
+        function playBlob(blob, onEnd) { const u = URL.createObjectURL(blob); const a = document.getElementById('audio-player'); a.src = u; a.play(); if(onEnd) a.onended = onEnd; }
+        function downloadBlob(blob, filename) { const u = URL.createObjectURL(blob); const a = document.createElement('a'); a.style.display='none'; a.href=u; a.download=filename; document.body.appendChild(a); a.click(); window.URL.revokeObjectURL(u); }
+        function setLoading(btn, load, txt) { btn.disabled = load; btn.innerHTML = load ? `<div class="loader mr-2"></div> Processing...` : (txt || `<i class="fa-solid fa-play mr-1"></i> Generate & Play`); }
+        function showToast(m) { const t=document.getElementById('toast'); t.textContent=m; t.classList.remove('opacity-0', 'translate-y-5'); setTimeout(()=>t.classList.add('opacity-0', 'translate-y-5'), 3000); }
+        function clearText() { document.getElementById('text-input').value = ''; }
+        function updateStatus(msg) { const bar = document.getElementById('status-bar'); bar.classList.remove('hidden'); bar.textContent = msg; }
+        window.forceReloadVoices = () => { const current = synth.getVoices(); if (current.length > 0) { standardVoices = current; if(mode === 'standard') populateStandardVoices(); } };
+        function populateStandardVoices() {
+            if(mode !== 'standard') return; standardVoices = synth.getVoices();
+            if(standardVoices.length === 0) { if (!els.voiceSelect.innerHTML.includes("Tidak ada")) { els.voiceSelect.innerHTML = ''; const opt = document.createElement('option'); opt.text = "Tidak ada suara (Tekan tombol 🔄)"; els.voiceSelect.add(opt); } } 
+            else { const prev = els.voiceSelect.value; els.voiceSelect.innerHTML = ''; let sorted = [...standardVoices].sort((a,b) => a.name.localeCompare(b.name)); sorted.forEach(v => { if(v.lang.includes('id') || v.lang.includes('in_ID')) { const opt = document.createElement('option'); opt.value = v.name; opt.text = `🇮🇩 ${v.name}`; els.voiceSelect.add(opt); } }); if(els.voiceSelect.options.length === 0) { sorted.forEach(v => { if(!v.lang.includes('id') && !v.lang.includes('in_ID')) { const opt = document.createElement('option'); opt.value = v.name; opt.text = v.name; els.voiceSelect.add(opt); } }); } if(prev) els.voiceSelect.value = prev; }
+        }
+        function addToHistory(text, voice, style, blob) {
+            const id = Date.now(); voiceHistory.unshift({ id, text, voice, style, blob }); if (voiceHistory.length > 10) voiceHistory.pop(); renderHistory();
+        }
+        function renderHistory() {
+            if(voiceHistory.length > 0) els.historyContainer.classList.remove('hidden');
+            els.historyList.innerHTML = voiceHistory.map(item => `<div class="bg-slate-800/50 p-3 rounded-xl border border-slate-700 flex items-center justify-between gap-3 group hover:border-slate-500 transition-colors"><div class="min-w-0 flex-grow"><div class="flex items-center gap-2 text-[10px] text-slate-400 mb-1"><span class="bg-slate-700/50 px-1.5 py-0.5 rounded text-sky-400 font-bold">${item.voice}</span><span class="truncate max-w-[100px]">${item.style}</span></div><p class="text-xs text-slate-200 truncate font-medium">${item.text}</p></div><div class="flex items-center gap-2"><button onclick="playBlobFromHistory(${item.id})" class="w-8 h-8 rounded-lg bg-sky-600/20 text-sky-400 hover:bg-sky-600 hover:text-white flex items-center justify-center transition-colors"><i class="fa-solid fa-play text-xs"></i></button><button onclick="downloadHistoryItem(${item.id})" class="w-8 h-8 rounded-lg bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors"><i class="fa-solid fa-download text-xs"></i></button></div></div>`).join('');
+        }
+        window.playBlobFromHistory = (id) => { const item = voiceHistory.find(i => i.id === id); if(item) playBlob(item.blob, () => {}); };
+        window.downloadHistoryItem = (id) => { const item = voiceHistory.find(i => i.id === id); if(item) downloadBlob(item.blob, `voice_${item.voice}_${item.id}.wav`); };
+
+        init();
+    </script>
+</body>
+</html>
